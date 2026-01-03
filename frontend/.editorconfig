@@ -1,0 +1,25 @@
+# EditorConfig is awesome: https://editorconfig.org
+
+# 根配置，适用于整个项目
+root = true
+
+# 设置所有文件的默认规则
+[*]
+end_of_line = auto
+charset = utf-8
+indent_style = space
+indent_size = 2
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+# 适用于 JavaScript/TypeScript 文件
+[*.{js,ts,jsx,tsx}]
+indent_size = 2
+
+# 适用于 Vue 文件
+[*.vue]
+indent_size = 2
+
+# 适用于 Markdown 文件
+[*.md]
+indent_size = 2

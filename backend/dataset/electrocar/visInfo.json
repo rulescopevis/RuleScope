@@ -1,0 +1,836 @@
+{
+    "County": {
+        "valueList": [
+            {
+                "value": "King",
+                "count": 15807,
+                "countRate": 0.67505
+            },
+            {
+                "value": "Snohomish",
+                "count": 3215,
+                "countRate": 0.1373
+            },
+            {
+                "value": "Thurston",
+                "count": 1766,
+                "countRate": 0.07542
+            },
+            {
+                "value": "Clark",
+                "count": 1318,
+                "countRate": 0.05629
+            },
+            {
+                "value": "Kitsap",
+                "count": 1310,
+                "countRate": 0.05594
+            }
+        ]
+    },
+    "City": {
+        "valueList": [
+            {
+                "value": "Seattle",
+                "count": 4367,
+                "countRate": 0.1865
+            },
+            {
+                "value": "Sammamish",
+                "count": 2500,
+                "countRate": 0.10676
+            },
+            {
+                "value": "Issaquah",
+                "count": 2410,
+                "countRate": 0.10292
+            },
+            {
+                "value": "Bothell",
+                "count": 1877,
+                "countRate": 0.08016
+            },
+            {
+                "value": "Mercer Island",
+                "count": 1814,
+                "countRate": 0.07747
+            },
+            {
+                "value": "Redmond",
+                "count": 1506,
+                "countRate": 0.06431
+            },
+            {
+                "value": "Olympia",
+                "count": 1386,
+                "countRate": 0.05919
+            },
+            {
+                "value": "Renton",
+                "count": 1364,
+                "countRate": 0.05825
+            },
+            {
+                "value": "Lake Stevens",
+                "count": 1338,
+                "countRate": 0.05714
+            },
+            {
+                "value": "Camas",
+                "count": 1318,
+                "countRate": 0.05629
+            },
+            {
+                "value": "Bainbridge Island",
+                "count": 1310,
+                "countRate": 0.05594
+            },
+            {
+                "value": "Maple Valley",
+                "count": 1253,
+                "countRate": 0.05351
+            },
+            {
+                "value": "Newcastle",
+                "count": 467,
+                "countRate": 0.01994
+            },
+            {
+                "value": "Tumwater",
+                "count": 380,
+                "countRate": 0.01623
+            },
+            {
+                "value": "Bellevue",
+                "count": 96,
+                "countRate": 0.0041
+            },
+            {
+                "value": "Preston",
+                "count": 23,
+                "countRate": 0.00098
+            },
+            {
+                "value": "Carnation",
+                "count": 4,
+                "countRate": 0.00017
+            },
+            {
+                "value": "Ravensdale",
+                "count": 2,
+                "countRate": 9e-05
+            },
+            {
+                "value": "Woodinville",
+                "count": 1,
+                "countRate": 4e-05
+            }
+        ]
+    },
+    "State": {
+        "valueList": [
+            {
+                "value": "WA",
+                "count": 23416,
+                "countRate": 1.0
+            }
+        ]
+    },
+    "Postal Code": {
+        "valueList": [
+            {
+                "value": "98075",
+                "count": 1884,
+                "countRate": 0.08046
+            },
+            {
+                "value": "98021",
+                "count": 1877,
+                "countRate": 0.08016
+            },
+            {
+                "value": "98059",
+                "count": 1838,
+                "countRate": 0.07849
+            },
+            {
+                "value": "98040",
+                "count": 1814,
+                "countRate": 0.07747
+            },
+            {
+                "value": "98029",
+                "count": 1784,
+                "countRate": 0.07619
+            },
+            {
+                "value": "98501",
+                "count": 1766,
+                "countRate": 0.07542
+            },
+            {
+                "value": "98103",
+                "count": 1692,
+                "countRate": 0.07226
+            },
+            {
+                "value": "98053",
+                "count": 1520,
+                "countRate": 0.06491
+            },
+            {
+                "value": "98117",
+                "count": 1429,
+                "countRate": 0.06103
+            },
+            {
+                "value": "98027",
+                "count": 1355,
+                "countRate": 0.05787
+            },
+            {
+                "value": "98258",
+                "count": 1338,
+                "countRate": 0.05714
+            },
+            {
+                "value": "98607",
+                "count": 1318,
+                "countRate": 0.05629
+            },
+            {
+                "value": "98110",
+                "count": 1310,
+                "countRate": 0.05594
+            },
+            {
+                "value": "98118",
+                "count": 1246,
+                "countRate": 0.05321
+            },
+            {
+                "value": "98038",
+                "count": 1245,
+                "countRate": 0.05317
+            }
+        ]
+    },
+    "Model Year": {
+        "valueList": [
+            {
+                "value": 2023,
+                "count": 6647,
+                "rate": 0.28387
+            },
+            {
+                "value": 2024,
+                "count": 3371,
+                "rate": 0.14396
+            },
+            {
+                "value": 2022,
+                "count": 3191,
+                "rate": 0.13627
+            },
+            {
+                "value": 2021,
+                "count": 2453,
+                "rate": 0.10476
+            },
+            {
+                "value": 2018,
+                "count": 1606,
+                "rate": 0.06859
+            },
+            {
+                "value": 2020,
+                "count": 1369,
+                "rate": 0.05846
+            },
+            {
+                "value": 2019,
+                "count": 1165,
+                "rate": 0.04975
+            },
+            {
+                "value": 2025,
+                "count": 947,
+                "rate": 0.04044
+            },
+            {
+                "value": 2017,
+                "count": 843,
+                "rate": 0.036
+            },
+            {
+                "value": 2015,
+                "count": 478,
+                "rate": 0.02041
+            },
+            {
+                "value": 2013,
+                "count": 424,
+                "rate": 0.01811
+            },
+            {
+                "value": 2016,
+                "count": 409,
+                "rate": 0.01747
+            },
+            {
+                "value": 2014,
+                "count": 329,
+                "rate": 0.01405
+            },
+            {
+                "value": 2012,
+                "count": 119,
+                "rate": 0.00508
+            },
+            {
+                "value": 2011,
+                "count": 65,
+                "rate": 0.00278
+            }
+        ]
+    },
+    "Make": {
+        "valueList": [
+            {
+                "value": "TESLA",
+                "count": 14558,
+                "countRate": 0.62171
+            },
+            {
+                "value": "NISSAN",
+                "count": 2190,
+                "countRate": 0.09353
+            },
+            {
+                "value": "CHEVROLET",
+                "count": 1580,
+                "countRate": 0.06748
+            },
+            {
+                "value": "FORD",
+                "count": 1178,
+                "countRate": 0.05031
+            },
+            {
+                "value": "BMW",
+                "count": 895,
+                "countRate": 0.03822
+            },
+            {
+                "value": "VOLKSWAGEN",
+                "count": 847,
+                "countRate": 0.03617
+            },
+            {
+                "value": "RIVIAN",
+                "count": 744,
+                "countRate": 0.03177
+            },
+            {
+                "value": "KIA",
+                "count": 538,
+                "countRate": 0.02298
+            },
+            {
+                "value": "TOYOTA",
+                "count": 489,
+                "countRate": 0.02088
+            },
+            {
+                "value": "VOLVO",
+                "count": 397,
+                "countRate": 0.01695
+            }
+        ]
+    },
+    "Model": {
+        "valueList": [
+            {
+                "value": "MODEL Y",
+                "count": 8138,
+                "countRate": 0.34754
+            },
+            {
+                "value": "MODEL 3",
+                "count": 5209,
+                "countRate": 0.22245
+            },
+            {
+                "value": "LEAF",
+                "count": 1979,
+                "countRate": 0.08451
+            },
+            {
+                "value": "MODEL S",
+                "count": 1211,
+                "countRate": 0.05172
+            },
+            {
+                "value": "BOLT EV",
+                "count": 1068,
+                "countRate": 0.04561
+            },
+            {
+                "value": "ID.4",
+                "count": 847,
+                "countRate": 0.03617
+            },
+            {
+                "value": "MUSTANG MACH-E",
+                "count": 777,
+                "countRate": 0.03318
+            },
+            {
+                "value": "R1S",
+                "count": 744,
+                "countRate": 0.03177
+            },
+            {
+                "value": "X5",
+                "count": 566,
+                "countRate": 0.02417
+            },
+            {
+                "value": "NIRO",
+                "count": 538,
+                "countRate": 0.02298
+            },
+            {
+                "value": "VOLT",
+                "count": 512,
+                "countRate": 0.02187
+            },
+            {
+                "value": "RAV4 PRIME",
+                "count": 489,
+                "countRate": 0.02088
+            },
+            {
+                "value": "F-150",
+                "count": 401,
+                "countRate": 0.01713
+            },
+            {
+                "value": "XC90",
+                "count": 397,
+                "countRate": 0.01695
+            },
+            {
+                "value": "I3",
+                "count": 329,
+                "countRate": 0.01405
+            },
+            {
+                "value": "ARIYA",
+                "count": 211,
+                "countRate": 0.00901
+            }
+        ]
+    },
+    "Electric Vehicle Type": {
+        "valueList": [
+            {
+                "value": "Battery Electric Vehicle (BEV)",
+                "count": 21082,
+                "countRate": 0.90032
+            },
+            {
+                "value": "Plug-in Hybrid Electric Vehicle (PHEV)",
+                "count": 2334,
+                "countRate": 0.09968
+            }
+        ]
+    },
+    "Electric Range": {
+        "valueList": [
+            {
+                "value": 0.0,
+                "count": 15251,
+                "rate": 0.65131
+            },
+            {
+                "value": 215.0,
+                "count": 1015,
+                "rate": 0.04335
+            },
+            {
+                "value": 220.0,
+                "count": 602,
+                "rate": 0.02571
+            },
+            {
+                "value": 238.0,
+                "count": 563,
+                "rate": 0.02404
+            },
+            {
+                "value": 84.0,
+                "count": 512,
+                "rate": 0.02187
+            },
+            {
+                "value": 42.0,
+                "count": 489,
+                "rate": 0.02088
+            },
+            {
+                "value": 291.0,
+                "count": 375,
+                "rate": 0.01601
+            },
+            {
+                "value": 208.0,
+                "count": 331,
+                "rate": 0.01414
+            },
+            {
+                "value": 30.0,
+                "count": 317,
+                "rate": 0.01354
+            },
+            {
+                "value": 210.0,
+                "count": 284,
+                "rate": 0.01213
+            },
+            {
+                "value": 53.0,
+                "count": 261,
+                "rate": 0.01115
+            },
+            {
+                "value": 322.0,
+                "count": 242,
+                "rate": 0.01033
+            },
+            {
+                "value": 75.0,
+                "count": 228,
+                "rate": 0.00974
+            },
+            {
+                "value": 150.0,
+                "count": 209,
+                "rate": 0.00893
+            },
+            {
+                "value": 38.0,
+                "count": 205,
+                "rate": 0.00875
+            },
+            {
+                "value": 266.0,
+                "count": 198,
+                "rate": 0.00846
+            },
+            {
+                "value": 259.0,
+                "count": 189,
+                "rate": 0.00807
+            },
+            {
+                "value": 151.0,
+                "count": 179,
+                "rate": 0.00764
+            },
+            {
+                "value": 32.0,
+                "count": 150,
+                "rate": 0.00641
+            },
+            {
+                "value": 249.0,
+                "count": 150,
+                "rate": 0.00641
+            },
+            {
+                "value": 239.0,
+                "count": 142,
+                "rate": 0.00606
+            },
+            {
+                "value": 18.0,
+                "count": 135,
+                "rate": 0.00577
+            },
+            {
+                "value": 107.0,
+                "count": 129,
+                "rate": 0.00551
+            },
+            {
+                "value": 73.0,
+                "count": 126,
+                "rate": 0.00538
+            },
+            {
+                "value": 72.0,
+                "count": 104,
+                "rate": 0.00444
+            },
+            {
+                "value": 39.0,
+                "count": 95,
+                "rate": 0.00406
+            },
+            {
+                "value": 35.0,
+                "count": 85,
+                "rate": 0.00363
+            },
+            {
+                "value": 26.0,
+                "count": 84,
+                "rate": 0.00359
+            },
+            {
+                "value": 308.0,
+                "count": 79,
+                "rate": 0.00337
+            },
+            {
+                "value": 33.0,
+                "count": 75,
+                "rate": 0.0032
+            },
+            {
+                "value": 14.0,
+                "count": 74,
+                "rate": 0.00316
+            },
+            {
+                "value": 97.0,
+                "count": 73,
+                "rate": 0.00312
+            },
+            {
+                "value": 40.0,
+                "count": 72,
+                "rate": 0.00307
+            },
+            {
+                "value": 81.0,
+                "count": 66,
+                "rate": 0.00282
+            },
+            {
+                "value": 149.0,
+                "count": 52,
+                "rate": 0.00222
+            },
+            {
+                "value": 13.0,
+                "count": 47,
+                "rate": 0.00201
+            },
+            {
+                "value": 330.0,
+                "count": 46,
+                "rate": 0.00196
+            },
+            {
+                "value": 270.0,
+                "count": 37,
+                "rate": 0.00158
+            },
+            {
+                "value": 126.0,
+                "count": 33,
+                "rate": 0.00141
+            },
+            {
+                "value": 153.0,
+                "count": 28,
+                "rate": 0.0012
+            },
+            {
+                "value": 114.0,
+                "count": 21,
+                "rate": 0.0009
+            },
+            {
+                "value": 19.0,
+                "count": 21,
+                "rate": 0.0009
+            },
+            {
+                "value": 337.0,
+                "count": 17,
+                "rate": 0.00073
+            },
+            {
+                "value": 17.0,
+                "count": 13,
+                "rate": 0.00056
+            },
+            {
+                "value": 265.0,
+                "count": 12,
+                "rate": 0.00051
+            }
+        ]
+    },
+    "Vehicle Location(longitude)": {
+        "valueList": [
+            {
+                "value": -122.03539,
+                "count": 1884,
+                "rate": 0.08046
+            },
+            {
+                "value": -122.18384,
+                "count": 1877,
+                "rate": 0.08016
+            },
+            {
+                "value": -122.15734,
+                "count": 1838,
+                "rate": 0.07849
+            },
+            {
+                "value": -122.21238,
+                "count": 1814,
+                "rate": 0.07747
+            },
+            {
+                "value": -122.00292,
+                "count": 1784,
+                "rate": 0.07619
+            },
+            {
+                "value": -122.89166,
+                "count": 1766,
+                "rate": 0.07542
+            },
+            {
+                "value": -122.35436,
+                "count": 1692,
+                "rate": 0.07226
+            },
+            {
+                "value": -122.03287,
+                "count": 1520,
+                "rate": 0.06491
+            },
+            {
+                "value": -122.38418,
+                "count": 1429,
+                "rate": 0.06103
+            },
+            {
+                "value": -122.03439,
+                "count": 1355,
+                "rate": 0.05787
+            },
+            {
+                "value": -122.06402,
+                "count": 1338,
+                "rate": 0.05714
+            },
+            {
+                "value": -122.40199,
+                "count": 1318,
+                "rate": 0.05629
+            },
+            {
+                "value": -122.521,
+                "count": 1310,
+                "rate": 0.05594
+            },
+            {
+                "value": -122.2668,
+                "count": 1246,
+                "rate": 0.05321
+            },
+            {
+                "value": -122.04526,
+                "count": 1245,
+                "rate": 0.05317
+            }
+        ]
+    },
+    "Vehicle Location(latitude)": {
+        "valueList": [
+            {
+                "value": 47.61344,
+                "count": 1884,
+                "rate": 0.08046
+            },
+            {
+                "value": 47.8031,
+                "count": 1877,
+                "rate": 0.08016
+            },
+            {
+                "value": 47.48718,
+                "count": 1838,
+                "rate": 0.07849
+            },
+            {
+                "value": 47.57816,
+                "count": 1814,
+                "rate": 0.07747
+            },
+            {
+                "value": 47.54748,
+                "count": 1784,
+                "rate": 0.07619
+            },
+            {
+                "value": 47.03956,
+                "count": 1766,
+                "rate": 0.07542
+            },
+            {
+                "value": 47.67596,
+                "count": 1692,
+                "rate": 0.07226
+            },
+            {
+                "value": 47.68555,
+                "count": 1520,
+                "rate": 0.06491
+            },
+            {
+                "value": 47.70044,
+                "count": 1429,
+                "rate": 0.06103
+            },
+            {
+                "value": 47.5301,
+                "count": 1355,
+                "rate": 0.05787
+            },
+            {
+                "value": 48.01497,
+                "count": 1338,
+                "rate": 0.05714
+            },
+            {
+                "value": 45.58694,
+                "count": 1318,
+                "rate": 0.05629
+            },
+            {
+                "value": 47.62728,
+                "count": 1310,
+                "rate": 0.05594
+            },
+            {
+                "value": 47.55115,
+                "count": 1246,
+                "rate": 0.05321
+            },
+            {
+                "value": 47.39394,
+                "count": 1245,
+                "rate": 0.05317
+            }
+        ]
+    }
+}

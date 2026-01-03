@@ -1,0 +1,612 @@
+{
+    "animal_name": {
+        "valueList": [
+            {
+                "value": "frog",
+                "count": 2,
+                "countRate": 0.01961
+            },
+            {
+                "value": "aardvark",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "antelope",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "bass",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "bear",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "boar",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "buffalo",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "calf",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "carp",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "catfish",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "cavy",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "cheetah",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "chicken",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "chub",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "clam",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "crab",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "crayfish",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "crow",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "deer",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "dogfish",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "dolphin",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "dove",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "duck",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "elephant",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "flamingo",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "flea",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "flyingfish",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "fruitbat",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "giraffe",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "girl",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "gnat",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "goat",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "gorilla",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "gull",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "haddock",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "hamster",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "hare",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "hawk",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "herring",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "honeybee",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "housefly",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "kiwi",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "ladybird",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "lark",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "leopard",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "lion",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "lobster",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "lynx",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "mink",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "mole",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "mongoose",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "moth",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "newt",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "octopus",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "opossum",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "oryx",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "ostrich",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "parakeet",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "penguin",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "pheasant",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "pike",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "piranha",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "pitviper",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "platypus",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "polecat",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "pony",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "porpoise",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "puma",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "pussycat",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "raccoon",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "reindeer",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "rhea",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "scorpion",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "seahorse",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "seal",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "sealion",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "seasnake",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "seawasp",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "skimmer",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "skua",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "slowworm",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "slug",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "sole",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "sparrow",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "squirrel",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "starfish",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "stingray",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "swan",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "termite",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "toad",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "tortoise",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "tuatara",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "tuna",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "vampire",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "vole",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "vulture",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "wallaby",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "wasp",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "wolf",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "worm",
+                "count": 1,
+                "countRate": 0.0098
+            },
+            {
+                "value": "wren",
+                "count": 1,
+                "countRate": 0.0098
+            }
+        ]
+    },
+    "Skin_Covering": {
+        "valueList": [
+            {
+                "value": "Fur",
+                "count": 43,
+                "countRate": 0.42157
+            },
+            {
+                "value": "Feathers",
+                "count": 20,
+                "countRate": 0.19608
+            },
+            {
+                "value": "Scales",
+                "count": 18,
+                "countRate": 0.17647
+            },
+            {
+                "value": "Shell",
+                "count": 15,
+                "countRate": 0.14706
+            },
+            {
+                "value": "Moist_Skin",
+                "count": 6,
+                "countRate": 0.05882
+            }
+        ]
+    },
+    "Reproduction": {
+        "valueList": [
+            {
+                "value": "Egg",
+                "count": 60,
+                "countRate": 0.58824
+            },
+            {
+                "value": "Live_Birth",
+                "count": 42,
+                "countRate": 0.41176
+            }
+        ]
+    },
+    "Movement": {
+        "valueList": [
+            {
+                "value": "Walk",
+                "count": 46,
+                "countRate": 0.45098
+            },
+            {
+                "value": "Swim",
+                "count": 31,
+                "countRate": 0.30392
+            },
+            {
+                "value": "Fly",
+                "count": 25,
+                "countRate": 0.2451
+            }
+        ]
+    },
+    "Class": {
+        "valueList": [
+            {
+                "value": "Mammal",
+                "count": 41,
+                "countRate": 0.40196
+            },
+            {
+                "value": "Bird",
+                "count": 20,
+                "countRate": 0.19608
+            },
+            {
+                "value": "Fish",
+                "count": 14,
+                "countRate": 0.13725
+            },
+            {
+                "value": "Invertebrate",
+                "count": 10,
+                "countRate": 0.09804
+            },
+            {
+                "value": "Bug",
+                "count": 8,
+                "countRate": 0.07843
+            },
+            {
+                "value": "Reptile",
+                "count": 5,
+                "countRate": 0.04902
+            },
+            {
+                "value": "Amphibian",
+                "count": 4,
+                "countRate": 0.03922
+            }
+        ]
+    }
+}

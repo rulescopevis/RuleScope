@@ -1,0 +1,448 @@
+{
+    "animal_name": {
+        "type": "character",
+        "specialMissingValueList": [
+            null,
+            "",
+            "nan"
+        ],
+        "missingDetectFlag": true,
+        "duplicateDetectFlag": true,
+        "missingValueFlag": false,
+        "duplicateFlag": true,
+        "sameEntityList": [],
+        "format": [],
+        "differentDomainList": [
+            "girl",
+            "vampire"
+        ]
+    },
+    "Skin_Covering": {
+        "type": "character",
+        "specialMissingValueList": [
+            null,
+            "",
+            "nan"
+        ],
+        "missingDetectFlag": false,
+        "duplicateDetectFlag": false,
+        "missingValueFlag": false,
+        "duplicateFlag": true,
+        "sameEntityList": [],
+        "format": [
+            "None"
+        ],
+        "differentDomainList": [],
+        "lookupChildFlag": true
+    },
+    "Reproduction": {
+        "type": "character",
+        "specialMissingValueList": [
+            null,
+            "",
+            "nan"
+        ],
+        "missingDetectFlag": false,
+        "duplicateDetectFlag": false,
+        "missingValueFlag": false,
+        "duplicateFlag": true,
+        "sameEntityList": [],
+        "format": [
+            "^(Egg|Live_Birth)$"
+        ],
+        "differentDomainList": [],
+        "lookupChildFlag": true
+    },
+    "Movement": {
+        "type": "character",
+        "specialMissingValueList": [
+            null,
+            "",
+            "nan"
+        ],
+        "missingDetectFlag": false,
+        "duplicateDetectFlag": false,
+        "missingValueFlag": false,
+        "duplicateFlag": true,
+        "sameEntityList": [],
+        "format": [
+            "^(Walk|Swim|Fly)$"
+        ],
+        "differentDomainList": [],
+        "lookupChildFlag": true
+    },
+    "Class": {
+        "type": "character",
+        "specialMissingValueList": [
+            null,
+            "",
+            "nan"
+        ],
+        "missingDetectFlag": true,
+        "duplicateDetectFlag": false,
+        "missingValueFlag": false,
+        "duplicateFlag": true,
+        "sameEntityList": [],
+        "format": [
+            "^(Mammal|Bird|Fish|Invertebrate|Bug|Reptile|Amphibian)$"
+        ],
+        "differentDomainList": [
+            "Bug"
+        ],
+        "lookupParentFlag": true
+    },
+    "domainDescription": {
+        "domain": "Animal Classification",
+        "description": "This table categorizes various animals based on biological characteristics. The 'animal_name' column lists specific animals; 'Skin_Covering' indicates their external covering (e.g., fur, scales); 'Reproduction' specifies whether they give live birth or lay eggs; 'Movement' describes their primary mode of locomotion; and 'Class' assigns each animal to a broad biological class such as Mammal, Bird, or Fish."
+    },
+    "dateCompareList": [],
+    "substringList": [],
+    "lookupList": [],
+    "conditionLogicColumnList": [],
+    "multiDifference": [],
+    "multipleDuplicateColumnsList": [],
+    "multipleConditionLogicColumnList": [{
+        "conditionColumns": [
+            "Skin_Covering",
+            "Reproduction",
+            "Movement"
+        ],
+        "constraintColumns": [
+            "Class"
+        ],
+        "columnType": {
+            "Skin_Covering": "EqualityBased",
+            "Reproduction": "EqualityBased",
+            "Movement": "EqualityBased",
+            "Class": "EqualityBased"
+        },
+        "conditionAndLogicList": [{
+                "conditionColumnValue": [{
+                    "Skin_Covering": [
+                        "Feathers"
+                    ],
+                    "Reproduction": [
+                        "Egg"
+                    ],
+                    "Movement": [
+                        "Fly"
+                    ]
+                }],
+                "constraintColumnValue": [{
+                    "Class": [
+                        "Bird"
+                    ]
+                }]
+            },
+            {
+                "conditionColumnValue": [{
+                    "Skin_Covering": [
+                        "Feathers"
+                    ],
+                    "Reproduction": [
+                        "Egg"
+                    ],
+                    "Movement": [
+                        "Walk"
+                    ]
+                }],
+                "constraintColumnValue": [{
+                    "Class": [
+                        "Bird"
+                    ]
+                }]
+            },
+            {
+                "conditionColumnValue": [{
+                    "Skin_Covering": [
+                        "Feathers"
+                    ],
+                    "Reproduction": [
+                        "Egg"
+                    ],
+                    "Movement": [
+                        "Swim"
+                    ]
+                }],
+                "constraintColumnValue": [{
+                    "Class": [
+                        "Bird"
+                    ]
+                }]
+            },
+            {
+                "conditionColumnValue": [{
+                    "Skin_Covering": [
+                        "Fur"
+                    ],
+                    "Reproduction": [
+                        "Live_Birth"
+                    ],
+                    "Movement": [
+                        "Walk"
+                    ]
+                }],
+                "constraintColumnValue": [{
+                    "Class": [
+                        "Mammal"
+                    ]
+                }]
+            },
+            {
+                "conditionColumnValue": [{
+                    "Skin_Covering": [
+                        "Fur"
+                    ],
+                    "Reproduction": [
+                        "Live_Birth"
+                    ],
+                    "Movement": [
+                        "Fly"
+                    ]
+                }],
+                "constraintColumnValue": [{
+                    "Class": [
+                        "Mammal"
+                    ]
+                }]
+            },
+            {
+                "conditionColumnValue": [{
+                    "Skin_Covering": [
+                        "Fur"
+                    ],
+                    "Reproduction": [
+                        "Live_Birth"
+                    ],
+                    "Movement": [
+                        "Swim"
+                    ]
+                }],
+                "constraintColumnValue": [{
+                    "Class": [
+                        "Mammal"
+                    ]
+                }]
+            },
+            {
+                "conditionColumnValue": [{
+                    "Skin_Covering": [
+                        "Fur"
+                    ],
+                    "Reproduction": [
+                        "Egg"
+                    ],
+                    "Movement": [
+                        "Swim"
+                    ]
+                }],
+                "constraintColumnValue": [{
+                    "Class": [
+                        "Mammal"
+                    ]
+                }]
+            },
+            {
+                "conditionColumnValue": [{
+                    "Skin_Covering": [
+                        "Moist_Skin"
+                    ],
+                    "Reproduction": [
+                        "Live_Birth"
+                    ],
+                    "Movement": [
+                        "Swim"
+                    ]
+                }],
+                "constraintColumnValue": [{
+                    "Class": [
+                        "Mammal"
+                    ]
+                }]
+            },
+            {
+                "conditionColumnValue": [{
+                    "Skin_Covering": [
+                        "Scales"
+                    ],
+                    "Reproduction": [
+                        "Egg"
+                    ],
+                    "Movement": [
+                        "Swim"
+                    ]
+                }],
+                "constraintColumnValue": [{
+                    "Class": [
+                        "Fish"
+                    ]
+                }]
+            },
+            {
+                "conditionColumnValue": [{
+                    "Skin_Covering": [
+                        "Scales"
+                    ],
+                    "Reproduction": [
+                        "Live_Birth"
+                    ],
+                    "Movement": [
+                        "Swim"
+                    ]
+                }],
+                "constraintColumnValue": [{
+                    "Class": [
+                        "Fish"
+                    ]
+                }]
+            },
+            {
+                "conditionColumnValue": [{
+                    "Skin_Covering": [
+                        "Scales"
+                    ],
+                    "Reproduction": [
+                        "Egg"
+                    ],
+                    "Movement": [
+                        "Walk"
+                    ]
+                }],
+                "constraintColumnValue": [{
+                    "Class": [
+                        "Reptile"
+                    ]
+                }]
+            },
+            {
+                "conditionColumnValue": [{
+                    "Movement": [
+                        "Walk"
+                    ],
+                    "Reproduction": [
+                        "Egg"
+                    ],
+                    "Skin_Covering": [
+                        "Shell"
+                    ]
+                }],
+                "constraintColumnValue": [{
+                    "Class": [
+                        "Bug",
+                        "Reptile",
+                        "Invertebrate"
+                    ]
+                }]
+            },
+            {
+                "conditionColumnValue": [{
+                    "Skin_Covering": [
+                        "Shell"
+                    ],
+                    "Reproduction": [
+                        "Egg"
+                    ],
+                    "Movement": [
+                        "Swim"
+                    ]
+                }],
+                "constraintColumnValue": [{
+                    "Class": [
+                        "Reptile",
+                        "Invertebrate"
+                    ]
+                }]
+            },
+            {
+                "conditionColumnValue": [{
+                    "Skin_Covering": [
+                        "Shell"
+                    ],
+                    "Reproduction": [
+                        "Live_Birth"
+                    ],
+                    "Movement": [
+                        "Walk"
+                    ]
+                }],
+                "constraintColumnValue": [{
+                    "Class": [
+                        "Invertebrate"
+                    ]
+                }]
+            },
+            {
+                "conditionColumnValue": [{
+                    "Skin_Covering": [
+                        "Moist_Skin"
+                    ],
+                    "Reproduction": [
+                        "Egg"
+                    ],
+                    "Movement": [
+                        "Swim"
+                    ]
+                }],
+                "constraintColumnValue": [{
+                    "Class": [
+                        "Amphibian"
+                    ]
+                }]
+            },
+            {
+                "conditionColumnValue": [{
+                    "Skin_Covering": [
+                        "Moist_Skin"
+                    ],
+                    "Reproduction": [
+                        "Egg"
+                    ],
+                    "Movement": [
+                        "Walk"
+                    ]
+                }],
+                "constraintColumnValue": [{
+                    "Class": [
+                        "Amphibian"
+                    ]
+                }]
+            },
+            {
+                "conditionColumnValue": [{
+                    "Skin_Covering": [
+                        "Fur"
+                    ],
+                    "Reproduction": [
+                        "Egg"
+                    ],
+                    "Movement": [
+                        "Fly"
+                    ]
+                }],
+                "constraintColumnValue": [{
+                    "Class": [
+                        "Bug"
+                    ]
+                }]
+            },
+            {
+                "conditionColumnValue": [{
+                    "Movement": [
+                        "Fly"
+                    ],
+                    "Reproduction": [
+                        "Egg"
+                    ],
+                    "Skin_Covering": [
+                        "Shell"
+                    ]
+                }],
+                "constraintColumnValue": [{
+                    "Class": [
+                        "Bug"
+                    ]
+                }]
+            }
+        ]
+    }]
+}

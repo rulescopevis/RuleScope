@@ -1,0 +1,1476 @@
+{
+    "animal_name": {
+        "valueList": [
+            {
+                "value": "frog",
+                "count": 2,
+                "countRate": 0.01961,
+                "index": [
+                    26,
+                    27
+                ],
+                "duration": "frog"
+            },
+            {
+                "value": "aardvark",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    0
+                ],
+                "duration": "aardvark"
+            },
+            {
+                "value": "antelope",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    1
+                ],
+                "duration": "antelope"
+            },
+            {
+                "value": "bass",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    2
+                ],
+                "duration": "bass"
+            },
+            {
+                "value": "bear",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    3
+                ],
+                "duration": "bear"
+            },
+            {
+                "value": "boar",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    4
+                ],
+                "duration": "boar"
+            },
+            {
+                "value": "buffalo",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    5
+                ],
+                "duration": "buffalo"
+            },
+            {
+                "value": "calf",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    6
+                ],
+                "duration": "calf"
+            },
+            {
+                "value": "carp",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    7
+                ],
+                "duration": "carp"
+            },
+            {
+                "value": "catfish",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    8
+                ],
+                "duration": "catfish"
+            },
+            {
+                "value": "cavy",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    9
+                ],
+                "duration": "cavy"
+            },
+            {
+                "value": "cheetah",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    10
+                ],
+                "duration": "cheetah"
+            },
+            {
+                "value": "chicken",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    11
+                ],
+                "duration": "chicken"
+            },
+            {
+                "value": "chub",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    12
+                ],
+                "duration": "chub"
+            },
+            {
+                "value": "clam",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    13
+                ],
+                "duration": "clam"
+            },
+            {
+                "value": "crab",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    14
+                ],
+                "duration": "crab"
+            },
+            {
+                "value": "crayfish",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    15
+                ],
+                "duration": "crayfish"
+            },
+            {
+                "value": "crow",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    16
+                ],
+                "duration": "crow"
+            },
+            {
+                "value": "deer",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    17
+                ],
+                "duration": "deer"
+            },
+            {
+                "value": "dogfish",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    18
+                ],
+                "duration": "dogfish"
+            },
+            {
+                "value": "dolphin",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    19
+                ],
+                "duration": "dolphin"
+            },
+            {
+                "value": "dove",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    20
+                ],
+                "duration": "dove"
+            },
+            {
+                "value": "duck",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    21
+                ],
+                "duration": "duck"
+            },
+            {
+                "value": "elephant",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    22
+                ],
+                "duration": "elephant"
+            },
+            {
+                "value": "flamingo",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    23
+                ],
+                "duration": "flamingo"
+            },
+            {
+                "value": "flea",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    24
+                ],
+                "duration": "flea"
+            },
+            {
+                "value": "flyingfish",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    25
+                ],
+                "duration": "flyingfish"
+            },
+            {
+                "value": "fruitbat",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    28
+                ],
+                "duration": "fruitbat"
+            },
+            {
+                "value": "giraffe",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    29
+                ],
+                "duration": "giraffe"
+            },
+            {
+                "value": "girl",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    30
+                ],
+                "duration": "girl"
+            },
+            {
+                "value": "gnat",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    31
+                ],
+                "duration": "gnat"
+            },
+            {
+                "value": "goat",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    32
+                ],
+                "duration": "goat"
+            },
+            {
+                "value": "gorilla",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    33
+                ],
+                "duration": "gorilla"
+            },
+            {
+                "value": "gull",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    34
+                ],
+                "duration": "gull"
+            },
+            {
+                "value": "haddock",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    35
+                ],
+                "duration": "haddock"
+            },
+            {
+                "value": "hamster",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    36
+                ],
+                "duration": "hamster"
+            },
+            {
+                "value": "hare",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    37
+                ],
+                "duration": "hare"
+            },
+            {
+                "value": "hawk",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    38
+                ],
+                "duration": "hawk"
+            },
+            {
+                "value": "herring",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    39
+                ],
+                "duration": "herring"
+            },
+            {
+                "value": "honeybee",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    40
+                ],
+                "duration": "honeybee"
+            },
+            {
+                "value": "housefly",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    41
+                ],
+                "duration": "housefly"
+            },
+            {
+                "value": "kiwi",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    42
+                ],
+                "duration": "kiwi"
+            },
+            {
+                "value": "ladybird",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    43
+                ],
+                "duration": "ladybird"
+            },
+            {
+                "value": "lark",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    44
+                ],
+                "duration": "lark"
+            },
+            {
+                "value": "leopard",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    45
+                ],
+                "duration": "leopard"
+            },
+            {
+                "value": "lion",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    46
+                ],
+                "duration": "lion"
+            },
+            {
+                "value": "lobster",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    47
+                ],
+                "duration": "lobster"
+            },
+            {
+                "value": "lynx",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    48
+                ],
+                "duration": "lynx"
+            },
+            {
+                "value": "mink",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    49
+                ],
+                "duration": "mink"
+            },
+            {
+                "value": "mole",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    50
+                ],
+                "duration": "mole"
+            },
+            {
+                "value": "mongoose",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    51
+                ],
+                "duration": "mongoose"
+            },
+            {
+                "value": "moth",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    52
+                ],
+                "duration": "moth"
+            },
+            {
+                "value": "newt",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    53
+                ],
+                "duration": "newt"
+            },
+            {
+                "value": "octopus",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    54
+                ],
+                "duration": "octopus"
+            },
+            {
+                "value": "opossum",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    55
+                ],
+                "duration": "opossum"
+            },
+            {
+                "value": "oryx",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    56
+                ],
+                "duration": "oryx"
+            },
+            {
+                "value": "ostrich",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    57
+                ],
+                "duration": "ostrich"
+            },
+            {
+                "value": "parakeet",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    58
+                ],
+                "duration": "parakeet"
+            },
+            {
+                "value": "penguin",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    59
+                ],
+                "duration": "penguin"
+            },
+            {
+                "value": "pheasant",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    60
+                ],
+                "duration": "pheasant"
+            },
+            {
+                "value": "pike",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    61
+                ],
+                "duration": "pike"
+            },
+            {
+                "value": "piranha",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    62
+                ],
+                "duration": "piranha"
+            },
+            {
+                "value": "pitviper",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    63
+                ],
+                "duration": "pitviper"
+            },
+            {
+                "value": "platypus",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    64
+                ],
+                "duration": "platypus"
+            },
+            {
+                "value": "polecat",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    65
+                ],
+                "duration": "polecat"
+            },
+            {
+                "value": "pony",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    66
+                ],
+                "duration": "pony"
+            },
+            {
+                "value": "porpoise",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    67
+                ],
+                "duration": "porpoise"
+            },
+            {
+                "value": "puma",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    68
+                ],
+                "duration": "puma"
+            },
+            {
+                "value": "pussycat",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    69
+                ],
+                "duration": "pussycat"
+            },
+            {
+                "value": "raccoon",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    70
+                ],
+                "duration": "raccoon"
+            },
+            {
+                "value": "reindeer",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    71
+                ],
+                "duration": "reindeer"
+            },
+            {
+                "value": "rhea",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    72
+                ],
+                "duration": "rhea"
+            },
+            {
+                "value": "scorpion",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    73
+                ],
+                "duration": "scorpion"
+            },
+            {
+                "value": "seahorse",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    74
+                ],
+                "duration": "seahorse"
+            },
+            {
+                "value": "seal",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    75
+                ],
+                "duration": "seal"
+            },
+            {
+                "value": "sealion",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    76
+                ],
+                "duration": "sealion"
+            },
+            {
+                "value": "seasnake",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    77
+                ],
+                "duration": "seasnake"
+            },
+            {
+                "value": "seawasp",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    78
+                ],
+                "duration": "seawasp"
+            },
+            {
+                "value": "skimmer",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    79
+                ],
+                "duration": "skimmer"
+            },
+            {
+                "value": "skua",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    80
+                ],
+                "duration": "skua"
+            },
+            {
+                "value": "slowworm",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    81
+                ],
+                "duration": "slowworm"
+            },
+            {
+                "value": "slug",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    82
+                ],
+                "duration": "slug"
+            },
+            {
+                "value": "sole",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    83
+                ],
+                "duration": "sole"
+            },
+            {
+                "value": "sparrow",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    84
+                ],
+                "duration": "sparrow"
+            },
+            {
+                "value": "squirrel",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    85
+                ],
+                "duration": "squirrel"
+            },
+            {
+                "value": "starfish",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    86
+                ],
+                "duration": "starfish"
+            },
+            {
+                "value": "stingray",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    87
+                ],
+                "duration": "stingray"
+            },
+            {
+                "value": "swan",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    88
+                ],
+                "duration": "swan"
+            },
+            {
+                "value": "termite",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    89
+                ],
+                "duration": "termite"
+            },
+            {
+                "value": "toad",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    90
+                ],
+                "duration": "toad"
+            },
+            {
+                "value": "tortoise",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    91
+                ],
+                "duration": "tortoise"
+            },
+            {
+                "value": "tuatara",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    92
+                ],
+                "duration": "tuatara"
+            },
+            {
+                "value": "tuna",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    93
+                ],
+                "duration": "tuna"
+            },
+            {
+                "value": "vampire",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    94
+                ],
+                "duration": "vampire"
+            },
+            {
+                "value": "vole",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    95
+                ],
+                "duration": "vole"
+            },
+            {
+                "value": "vulture",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    96
+                ],
+                "duration": "vulture"
+            },
+            {
+                "value": "wallaby",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    97
+                ],
+                "duration": "wallaby"
+            },
+            {
+                "value": "wasp",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    98
+                ],
+                "duration": "wasp"
+            },
+            {
+                "value": "wolf",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    99
+                ],
+                "duration": "wolf"
+            },
+            {
+                "value": "worm",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    100
+                ],
+                "duration": "worm"
+            },
+            {
+                "value": "wren",
+                "count": 1,
+                "countRate": 0.0098,
+                "index": [
+                    101
+                ],
+                "duration": "wren"
+            }
+        ]
+    },
+    "Skin_Covering": {
+        "valueList": [
+            {
+                "value": "Fur",
+                "count": 43,
+                "countRate": 0.42157,
+                "index": [
+                    0,
+                    1,
+                    3,
+                    4,
+                    5,
+                    6,
+                    9,
+                    10,
+                    17,
+                    22,
+                    28,
+                    29,
+                    30,
+                    32,
+                    33,
+                    36,
+                    37,
+                    40,
+                    41,
+                    45,
+                    46,
+                    48,
+                    49,
+                    50,
+                    51,
+                    52,
+                    55,
+                    56,
+                    64,
+                    65,
+                    66,
+                    68,
+                    69,
+                    70,
+                    71,
+                    75,
+                    76,
+                    85,
+                    94,
+                    95,
+                    97,
+                    98,
+                    99
+                ],
+                "duration": "Fur"
+            },
+            {
+                "value": "Feathers",
+                "count": 20,
+                "countRate": 0.19608,
+                "index": [
+                    11,
+                    16,
+                    20,
+                    21,
+                    23,
+                    34,
+                    38,
+                    42,
+                    44,
+                    57,
+                    58,
+                    59,
+                    60,
+                    72,
+                    79,
+                    80,
+                    84,
+                    88,
+                    96,
+                    101
+                ],
+                "duration": "Feathers"
+            },
+            {
+                "value": "Scales",
+                "count": 18,
+                "countRate": 0.17647,
+                "index": [
+                    2,
+                    7,
+                    8,
+                    12,
+                    18,
+                    25,
+                    35,
+                    39,
+                    61,
+                    62,
+                    63,
+                    74,
+                    77,
+                    81,
+                    83,
+                    87,
+                    92,
+                    93
+                ],
+                "duration": "Scales"
+            },
+            {
+                "value": "Shell",
+                "count": 15,
+                "countRate": 0.14706,
+                "index": [
+                    13,
+                    14,
+                    15,
+                    24,
+                    31,
+                    43,
+                    47,
+                    54,
+                    73,
+                    78,
+                    82,
+                    86,
+                    89,
+                    91,
+                    100
+                ],
+                "duration": "Shell"
+            },
+            {
+                "value": "Moist_Skin",
+                "count": 6,
+                "countRate": 0.05882,
+                "index": [
+                    19,
+                    26,
+                    27,
+                    53,
+                    67,
+                    90
+                ],
+                "duration": "Moist_Skin"
+            }
+        ]
+    },
+    "Reproduction": {
+        "valueList": [
+            {
+                "value": "Egg",
+                "count": 60,
+                "countRate": 0.58824,
+                "index": [
+                    2,
+                    7,
+                    8,
+                    11,
+                    12,
+                    13,
+                    14,
+                    15,
+                    16,
+                    18,
+                    20,
+                    21,
+                    23,
+                    24,
+                    25,
+                    26,
+                    27,
+                    31,
+                    34,
+                    35,
+                    38,
+                    39,
+                    40,
+                    41,
+                    42,
+                    43,
+                    44,
+                    47,
+                    52,
+                    53,
+                    54,
+                    57,
+                    58,
+                    59,
+                    60,
+                    61,
+                    62,
+                    63,
+                    64,
+                    72,
+                    74,
+                    78,
+                    79,
+                    80,
+                    81,
+                    82,
+                    83,
+                    84,
+                    86,
+                    87,
+                    88,
+                    89,
+                    90,
+                    91,
+                    92,
+                    93,
+                    96,
+                    98,
+                    100,
+                    101
+                ],
+                "duration": "Egg"
+            },
+            {
+                "value": "Live_Birth",
+                "count": 42,
+                "countRate": 0.41176,
+                "index": [
+                    0,
+                    1,
+                    3,
+                    4,
+                    5,
+                    6,
+                    9,
+                    10,
+                    17,
+                    19,
+                    22,
+                    28,
+                    29,
+                    30,
+                    32,
+                    33,
+                    36,
+                    37,
+                    45,
+                    46,
+                    48,
+                    49,
+                    50,
+                    51,
+                    55,
+                    56,
+                    65,
+                    66,
+                    67,
+                    68,
+                    69,
+                    70,
+                    71,
+                    73,
+                    75,
+                    76,
+                    77,
+                    85,
+                    94,
+                    95,
+                    97,
+                    99
+                ],
+                "duration": "Live_Birth"
+            }
+        ]
+    },
+    "Movement": {
+        "valueList": [
+            {
+                "value": "Walk",
+                "count": 46,
+                "countRate": 0.45098,
+                "index": [
+                    0,
+                    1,
+                    3,
+                    4,
+                    5,
+                    6,
+                    9,
+                    10,
+                    13,
+                    17,
+                    22,
+                    24,
+                    29,
+                    30,
+                    32,
+                    33,
+                    36,
+                    37,
+                    42,
+                    45,
+                    46,
+                    48,
+                    50,
+                    51,
+                    55,
+                    56,
+                    57,
+                    63,
+                    65,
+                    66,
+                    68,
+                    69,
+                    70,
+                    71,
+                    72,
+                    73,
+                    81,
+                    82,
+                    85,
+                    89,
+                    91,
+                    92,
+                    95,
+                    97,
+                    99,
+                    100
+                ],
+                "duration": "Walk"
+            },
+            {
+                "value": "Swim",
+                "count": 31,
+                "countRate": 0.30392,
+                "index": [
+                    2,
+                    7,
+                    8,
+                    12,
+                    14,
+                    15,
+                    18,
+                    19,
+                    26,
+                    27,
+                    35,
+                    39,
+                    47,
+                    49,
+                    53,
+                    54,
+                    59,
+                    61,
+                    62,
+                    64,
+                    67,
+                    74,
+                    75,
+                    76,
+                    77,
+                    78,
+                    83,
+                    86,
+                    87,
+                    90,
+                    93
+                ],
+                "duration": "Swim"
+            },
+            {
+                "value": "Fly",
+                "count": 25,
+                "countRate": 0.2451,
+                "index": [
+                    11,
+                    16,
+                    20,
+                    21,
+                    23,
+                    25,
+                    28,
+                    31,
+                    34,
+                    38,
+                    40,
+                    41,
+                    43,
+                    44,
+                    52,
+                    58,
+                    60,
+                    79,
+                    80,
+                    84,
+                    88,
+                    94,
+                    96,
+                    98,
+                    101
+                ],
+                "duration": "Fly"
+            }
+        ]
+    },
+    "Class": {
+        "valueList": [
+            {
+                "value": "Mammal",
+                "count": 41,
+                "countRate": 0.40196,
+                "index": [
+                    0,
+                    1,
+                    3,
+                    4,
+                    5,
+                    6,
+                    9,
+                    10,
+                    17,
+                    19,
+                    22,
+                    28,
+                    29,
+                    30,
+                    32,
+                    33,
+                    36,
+                    37,
+                    45,
+                    46,
+                    48,
+                    49,
+                    50,
+                    51,
+                    55,
+                    56,
+                    64,
+                    65,
+                    66,
+                    67,
+                    68,
+                    69,
+                    70,
+                    71,
+                    75,
+                    76,
+                    85,
+                    94,
+                    95,
+                    97,
+                    99
+                ],
+                "duration": "Mammal"
+            },
+            {
+                "value": "Bird",
+                "count": 20,
+                "countRate": 0.19608,
+                "index": [
+                    11,
+                    16,
+                    20,
+                    21,
+                    23,
+                    34,
+                    38,
+                    42,
+                    44,
+                    57,
+                    58,
+                    59,
+                    60,
+                    72,
+                    79,
+                    80,
+                    84,
+                    88,
+                    96,
+                    101
+                ],
+                "duration": "Bird"
+            },
+            {
+                "value": "Fish",
+                "count": 14,
+                "countRate": 0.13725,
+                "index": [
+                    2,
+                    7,
+                    8,
+                    12,
+                    18,
+                    25,
+                    35,
+                    39,
+                    61,
+                    62,
+                    74,
+                    83,
+                    87,
+                    93
+                ],
+                "duration": "Fish"
+            },
+            {
+                "value": "Invertebrate",
+                "count": 10,
+                "countRate": 0.09804,
+                "index": [
+                    13,
+                    14,
+                    15,
+                    47,
+                    54,
+                    73,
+                    78,
+                    82,
+                    86,
+                    100
+                ],
+                "duration": "Invertebrate"
+            },
+            {
+                "value": "Bug",
+                "count": 8,
+                "countRate": 0.07843,
+                "index": [
+                    24,
+                    31,
+                    40,
+                    41,
+                    43,
+                    52,
+                    89,
+                    98
+                ],
+                "duration": "Bug"
+            },
+            {
+                "value": "Reptile",
+                "count": 5,
+                "countRate": 0.04902,
+                "index": [
+                    63,
+                    77,
+                    81,
+                    91,
+                    92
+                ],
+                "duration": "Reptile"
+            },
+            {
+                "value": "Amphibian",
+                "count": 4,
+                "countRate": 0.03922,
+                "index": [
+                    26,
+                    27,
+                    53,
+                    90
+                ],
+                "duration": "Amphibian"
+            }
+        ]
+    }
+}

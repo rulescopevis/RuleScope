@@ -1,0 +1,763 @@
+{
+    "County": {
+        "type": "character",
+        "specialMissingValueList": [
+            null,
+            "",
+            "nan"
+        ],
+        "missingDetectFlag": true,
+        "duplicateDetectFlag": false,
+        "missingValueFlag": false,
+        "duplicateFlag": true,
+        "sameEntityList": [],
+        "format": [],
+        "differentDomainList": [],
+        "lookupParentFlag": true,
+        "lookupChildFlag": true,
+        "constraintFlag": true,
+        "conditionFlag": true,
+        "multipleDuplicateFlag": true,
+        "multipleConditionFlag": true
+    },
+    "City": {
+        "type": "character",
+        "specialMissingValueList": [
+            null,
+            "",
+            "nan"
+        ],
+        "missingDetectFlag": true,
+        "duplicateDetectFlag": false,
+        "missingValueFlag": false,
+        "duplicateFlag": true,
+        "sameEntityList": [],
+        "format": [],
+        "differentDomainList": [],
+        "lookupChildFlag": true,
+        "constraintFlag": true,
+        "conditionFlag": true,
+        "multipleDuplicateFlag": true,
+        "multipleConditionFlag": true
+    },
+    "State": {
+        "type": "character",
+        "specialMissingValueList": [
+            null,
+            "",
+            "nan"
+        ],
+        "missingDetectFlag": true,
+        "duplicateDetectFlag": false,
+        "missingValueFlag": false,
+        "duplicateFlag": true,
+        "sameEntityList": [],
+        "format": [],
+        "differentDomainList": [],
+        "lookupParentFlag": true,
+        "conditionFlag": true
+    },
+    "Postal Code": {
+        "type": "character",
+        "specialMissingValueList": [
+            null,
+            "",
+            "nan"
+        ],
+        "missingDetectFlag": true,
+        "duplicateDetectFlag": false,
+        "missingValueFlag": false,
+        "duplicateFlag": true,
+        "sameEntityList": [],
+        "format": [
+            "^9[0-9]{4}$"
+        ],
+        "differentDomainList": [],
+        "constraintFlag": true,
+        "multipleConditionFlag": true
+    },
+    "Model Year": {
+        "type": "numeric",
+        "specialMissingValueList": [
+            null,
+            "",
+            "nan"
+        ],
+        "missingDetectFlag": true,
+        "duplicateDetectFlag": false,
+        "missingValueFlag": false,
+        "duplicateFlag": true,
+        "outlierFunction": "modified_zscore",
+        "outlierParameters": {
+            "threshold": 3.5
+        },
+        "outlierRange": {
+            "start": 2008.0,
+            "end": 2025.0,
+            "startInclusive": true,
+            "endInclusive": true
+        },
+        "distribution": "skewed",
+        "range": [{
+            "start": 2013,
+            "end": 2025,
+            "startInclusive": true,
+            "endInclusive": true
+        }],
+        "compareFlag": true,
+        "multipleDuplicateFlag": true
+    },
+    "Make": {
+        "type": "character",
+        "specialMissingValueList": [
+            null,
+            "",
+            "nan"
+        ],
+        "missingDetectFlag": true,
+        "duplicateDetectFlag": false,
+        "missingValueFlag": false,
+        "duplicateFlag": true,
+        "sameEntityList": [],
+        "format": [],
+        "differentDomainList": [],
+        "multipleDuplicateFlag": true
+    },
+    "Model": {
+        "type": "character",
+        "specialMissingValueList": [
+            null,
+            "",
+            "nan"
+        ],
+        "missingDetectFlag": true,
+        "duplicateDetectFlag": false,
+        "missingValueFlag": false,
+        "duplicateFlag": true,
+        "sameEntityList": [],
+        "format": [],
+        "differentDomainList": [],
+        "multipleDuplicateFlag": true
+    },
+    "Electric Vehicle Type": {
+        "type": "character",
+        "specialMissingValueList": [
+            null,
+            "",
+            "nan"
+        ],
+        "missingDetectFlag": true,
+        "duplicateDetectFlag": false,
+        "missingValueFlag": false,
+        "duplicateFlag": true,
+        "sameEntityList": [],
+        "format": [],
+        "differentDomainList": [],
+        "conditionFlag": true
+    },
+    "Electric Range": {
+        "type": "numeric",
+        "specialMissingValueList": [
+            null,
+            "",
+            "nan"
+        ],
+        "missingDetectFlag": true,
+        "duplicateDetectFlag": false,
+        "missingValueFlag": false,
+        "duplicateFlag": true,
+        "outlierFunction": "modified_zscore",
+        "outlierParameters": {
+            "threshold": 3.5
+        },
+        "outlierRange": {
+            "start": 0.0,
+            "end": 400.0,
+            "startInclusive": true,
+            "endInclusive": true
+        },
+        "distribution": "skewed",
+        "range": [{
+            "start": 0,
+            "end": 400,
+            "startInclusive": true,
+            "endInclusive": true
+        }],
+        "compareFlag": true,
+        "constraintFlag": true
+    },
+    "Vehicle Location(longitude)": {
+        "type": "numeric",
+        "specialMissingValueList": [
+            null,
+            "",
+            "nan"
+        ],
+        "missingDetectFlag": true,
+        "duplicateDetectFlag": false,
+        "missingValueFlag": false,
+        "duplicateFlag": true,
+        "outlierFunction": "modified_zscore",
+        "outlierParameters": {
+            "threshold": 3.5
+        },
+        "outlierRange": {
+            "start": -122.89166,
+            "end": -122.00292,
+            "startInclusive": true,
+            "endInclusive": true
+        },
+        "distribution": "skewed",
+        "range": [{
+            "start": -124.5,
+            "end": -116.5,
+            "startInclusive": true,
+            "endInclusive": true
+        }],
+        "multiDifferenceFlag": true,
+        "multipleDuplicateFlag": true
+    },
+    "Vehicle Location(latitude)": {
+        "type": "numeric",
+        "specialMissingValueList": [
+            null,
+            "",
+            "nan"
+        ],
+        "missingDetectFlag": true,
+        "duplicateDetectFlag": false,
+        "missingValueFlag": false,
+        "duplicateFlag": true,
+        "outlierFunction": "modified_zscore",
+        "outlierParameters": {
+            "threshold": 3.5
+        },
+        "outlierRange": {
+            "start": 47.39394,
+            "end": 48.01497,
+            "startInclusive": true,
+            "endInclusive": true
+        },
+        "distribution": "skewed",
+        "range": [{
+            "start": 45.5,
+            "end": 49.0,
+            "startInclusive": true,
+            "endInclusive": true
+        }],
+        "multiDifferenceFlag": true,
+        "multipleDuplicateFlag": true
+    },
+    "domainDescription": {
+        "domain": "Electric Vehicles",
+        "description": "This table contains information about electric vehicles located in various cities and counties within the state of Washington. It includes details such as vehicle make, model, year, type (BEV or PHEV), electric range, and geographical location coordinates."
+    },
+    "numericCompareList": [],
+    "lookupList": [{
+            "parentColumnName": "County",
+            "childColumnName": "City",
+            "lookupList": [{
+                    "parentValue": "Clark",
+                    "childValueList": [
+                        "Camas"
+                    ]
+                },
+                {
+                    "parentValue": "King",
+                    "childValueList": [
+                        "Bellevue",
+                        "Carnation",
+                        "Issaquah",
+                        "Maple Valley",
+                        "Mercer Island",
+                        "Newcastle",
+                        "Preston",
+                        "Ravensdale",
+                        "Redmond",
+                        "Renton",
+                        "Sammamish",
+                        "Seattle",
+                        "Woodinville"
+                    ]
+                },
+                {
+                    "parentValue": "Kitsap",
+                    "childValueList": [
+                        "Bainbridge Island"
+                    ]
+                },
+                {
+                    "parentValue": "Snohomish",
+                    "childValueList": [
+                        "Bothell",
+                        "Lake Stevens"
+                    ]
+                },
+                {
+                    "parentValue": "Thurston",
+                    "childValueList": [
+                        "Olympia",
+                        "Tumwater"
+                    ]
+                }
+            ]
+        },
+        {
+            "parentColumnName": "Make",
+            "childColumnName": "Model",
+            "lookupList": [{
+                    "parentValue": "BMW",
+                    "childValueList": ["I3", "X5"]
+                },
+                {
+                    "parentValue": "CHEVROLET",
+                    "childValueList": ["BOLT EV", "VOLT"]
+                },
+                {
+                    "parentValue": "FORD",
+                    "childValueList": ["F-150", "MUSTANG MACH-E"]
+                },
+                {
+                    "parentValue": "KIA",
+                    "childValueList": ["NIRO"]
+                }, {
+                    "parentValue": "NISSAN",
+                    "childValueList": ["ARIYA", "LEAF"]
+                },
+                {
+                    "parentValue": "RIVIAN",
+                    "childValueList": ["R1S"]
+                }, {
+                    "parentValue": "TESLA",
+                    "childValueList": ["MODEL 3", "MODEL S", "MODEL Y"]
+                },
+                {
+                    "parentValue": "TOYOTA",
+                    "childValueList": ["RAV4 PRIME"]
+                },
+                {
+                    "parentValue": "VOLKSWAGEN",
+                    "childValueList": ["ID.4"]
+                },
+                {
+                    "parentValue": "VOLVO",
+                    "childValueList": ["XC90"]
+                }
+            ]
+        }
+    ],
+    "conditionLogicColumnList": [{
+        "conditionColumns": [
+            "Electric Vehicle Type"
+        ],
+        "constraintColumns": [
+            "Electric Range"
+        ],
+        "columnType": {
+            "Electric Vehicle Type": "EqualityBased",
+            "Electric Range": "RangeBased"
+        },
+        "conditionAndLogicList": [{
+                "conditionColumnValue": [{
+                    "Electric Vehicle Type": [
+                        "Battery Electric Vehicle (BEV)"
+                    ]
+                }],
+                "constraintColumnValue": [{
+                    "Electric Range": {
+                        "start": 0.0,
+                        "end": 400.0,
+                        "startInclusive": true,
+                        "endInclusive": true
+                    }
+                }]
+            },
+            {
+                "conditionColumnValue": [{
+                    "Electric Vehicle Type": [
+                        "Plug-in Hybrid Electric Vehicle (PHEV)"
+                    ]
+                }],
+                "constraintColumnValue": [{
+                    "Electric Range": {
+                        "start": 14.0,
+                        "end": 80.0,
+                        "startInclusive": true,
+                        "endInclusive": true
+                    }
+                }]
+            }
+        ]
+    }],
+    "multiDifference": [],
+    "multipleDuplicateColumnsList": [],
+    "multipleConditionLogicColumnList": [{
+        "conditionColumns": [
+            "County",
+            "City"
+        ],
+        "constraintColumns": [
+            "Postal Code"
+        ],
+        "columnType": {
+            "County": "EqualityBased",
+            "City": "EqualityBased",
+            "Postal Code": "EqualityBased"
+        },
+        "conditionAndLogicList": [{
+                "conditionColumnValue": [{
+                        "County": [
+                            "Clark"
+                        ]
+                    },
+                    {
+                        "City": [
+                            "Camas"
+                        ]
+                    }
+                ],
+                "constraintColumnValue": [{
+                    "Postal Code": [
+                        "98607"
+                    ]
+                }]
+            },
+            {
+                "conditionColumnValue": [{
+                        "County": [
+                            "King"
+                        ]
+                    },
+                    {
+                        "City": [
+                            "Bellevue"
+                        ]
+                    }
+                ],
+                "constraintColumnValue": [{
+                    "Postal Code": [
+                        "98027"
+                    ]
+                }]
+            },
+            {
+                "conditionColumnValue": [{
+                        "County": [
+                            "King"
+                        ]
+                    },
+                    {
+                        "City": [
+                            "Carnation"
+                        ]
+                    }
+                ],
+                "constraintColumnValue": [{
+                    "Postal Code": [
+                        "98053"
+                    ]
+                }]
+            },
+            {
+                "conditionColumnValue": [{
+                        "County": [
+                            "King"
+                        ]
+                    },
+                    {
+                        "City": [
+                            "Issaquah"
+                        ]
+                    }
+                ],
+                "constraintColumnValue": [{
+                    "Postal Code": [
+                        "98027",
+                        "98029",
+                        "98059",
+                        "98075"
+                    ]
+                }]
+            },
+            {
+                "conditionColumnValue": [{
+                        "County": [
+                            "King"
+                        ]
+                    },
+                    {
+                        "City": [
+                            "Maple Valley"
+                        ]
+                    }
+                ],
+                "constraintColumnValue": [{
+                    "Postal Code": [
+                        "98027",
+                        "98038",
+                        "98059"
+                    ]
+                }]
+            },
+            {
+                "conditionColumnValue": [{
+                        "County": [
+                            "King"
+                        ]
+                    },
+                    {
+                        "City": [
+                            "Mercer Island"
+                        ]
+                    }
+                ],
+                "constraintColumnValue": [{
+                    "Postal Code": [
+                        "98040"
+                    ]
+                }]
+            },
+            {
+                "conditionColumnValue": [{
+                        "County": [
+                            "King"
+                        ]
+                    },
+                    {
+                        "City": [
+                            "Newcastle"
+                        ]
+                    }
+                ],
+                "constraintColumnValue": [{
+                    "Postal Code": [
+                        "98059"
+                    ]
+                }]
+            },
+            {
+                "conditionColumnValue": [{
+                        "County": [
+                            "King"
+                        ]
+                    },
+                    {
+                        "City": [
+                            "Preston"
+                        ]
+                    }
+                ],
+                "constraintColumnValue": [{
+                    "Postal Code": [
+                        "98027"
+                    ]
+                }]
+            },
+            {
+                "conditionColumnValue": [{
+                        "County": [
+                            "King"
+                        ]
+                    },
+                    {
+                        "City": [
+                            "Ravensdale"
+                        ]
+                    }
+                ],
+                "constraintColumnValue": [{
+                    "Postal Code": [
+                        "98038"
+                    ]
+                }]
+            },
+            {
+                "conditionColumnValue": [{
+                        "County": [
+                            "King"
+                        ]
+                    },
+                    {
+                        "City": [
+                            "Redmond"
+                        ]
+                    }
+                ],
+                "constraintColumnValue": [{
+                    "Postal Code": [
+                        "98053"
+                    ]
+                }]
+            },
+            {
+                "conditionColumnValue": [{
+                        "County": [
+                            "King"
+                        ]
+                    },
+                    {
+                        "City": [
+                            "Renton"
+                        ]
+                    }
+                ],
+                "constraintColumnValue": [{
+                    "Postal Code": [
+                        "98027",
+                        "98038",
+                        "98059"
+                    ]
+                }]
+            },
+            {
+                "conditionColumnValue": [{
+                        "County": [
+                            "King"
+                        ]
+                    },
+                    {
+                        "City": [
+                            "Sammamish"
+                        ]
+                    }
+                ],
+                "constraintColumnValue": [{
+                    "Postal Code": [
+                        "98029",
+                        "98053",
+                        "98075"
+                    ]
+                }]
+            },
+            {
+                "conditionColumnValue": [{
+                        "County": [
+                            "King"
+                        ]
+                    },
+                    {
+                        "City": [
+                            "Seattle"
+                        ]
+                    }
+                ],
+                "constraintColumnValue": [{
+                    "Postal Code": [
+                        "98103",
+                        "98117",
+                        "98118"
+                    ]
+                }]
+            },
+            {
+                "conditionColumnValue": [{
+                        "County": [
+                            "King"
+                        ]
+                    },
+                    {
+                        "City": [
+                            "Woodinville"
+                        ]
+                    }
+                ],
+                "constraintColumnValue": [{
+                    "Postal Code": [
+                        "98053"
+                    ]
+                }]
+            },
+            {
+                "conditionColumnValue": [{
+                        "County": [
+                            "Kitsap"
+                        ]
+                    },
+                    {
+                        "City": [
+                            "Bainbridge Island"
+                        ]
+                    }
+                ],
+                "constraintColumnValue": [{
+                    "Postal Code": [
+                        "98110"
+                    ]
+                }]
+            },
+            {
+                "conditionColumnValue": [{
+                        "County": [
+                            "Snohomish"
+                        ]
+                    },
+                    {
+                        "City": [
+                            "Bothell"
+                        ]
+                    }
+                ],
+                "constraintColumnValue": [{
+                    "Postal Code": [
+                        "98021"
+                    ]
+                }]
+            },
+            {
+                "conditionColumnValue": [{
+                        "County": [
+                            "Snohomish"
+                        ]
+                    },
+                    {
+                        "City": [
+                            "Lake Stevens"
+                        ]
+                    }
+                ],
+                "constraintColumnValue": [{
+                    "Postal Code": [
+                        "98258"
+                    ]
+                }]
+            },
+            {
+                "conditionColumnValue": [{
+                        "County": [
+                            "Thurston"
+                        ]
+                    },
+                    {
+                        "City": [
+                            "Olympia"
+                        ]
+                    }
+                ],
+                "constraintColumnValue": [{
+                    "Postal Code": [
+                        "98501"
+                    ]
+                }]
+            },
+            {
+                "conditionColumnValue": [{
+                        "County": [
+                            "Thurston"
+                        ]
+                    },
+                    {
+                        "City": [
+                            "Tumwater"
+                        ]
+                    }
+                ],
+                "constraintColumnValue": [{
+                    "Postal Code": [
+                        "98501"
+                    ]
+                }]
+            }
+        ]
+    }],
+    "substringList": []
+}
