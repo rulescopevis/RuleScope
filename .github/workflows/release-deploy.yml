@@ -102,7 +102,7 @@ jobs:
                 container_name: rulescope_frontend
                 restart: always
                 ports:
-                  - "8080:7323"
+                  - "8080:80"
                 depends_on:
                   - backend
             EOF
