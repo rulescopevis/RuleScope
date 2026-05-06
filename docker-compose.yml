@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   backend:
     build: 
@@ -17,6 +15,6 @@ services:
     container_name: my_vue_frontend
     restart: always
     ports:
-      - "8080:7323"   
+      - "8080:80"
     depends_on:
       - backend
