@@ -1,0 +1,113 @@
+name: Release Deploy
+
+on:
+  release:
+    types: [created]
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      backend_image: ${{ steps.meta.outputs.backend_image }}
+      frontend_image: ${{ steps.meta.outputs.frontend_image }}
+      tag: ${{ steps.meta.outputs.tag }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Compute image names and tag
+        id: meta
+        run: |
+          REPO_LC=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+          echo "backend_image=${REGISTRY}/${REPO_LC}/backend" >> "$GITHUB_OUTPUT"
+          echo "frontend_image=${REGISTRY}/${REPO_LC}/frontend" >> "$GITHUB_OUTPUT"
+          echo "tag=${{ github.event.release.tag_name }}" >> "$GITHUB_OUTPUT"
+
+      - name: Build and push backend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          file: ./backend/Dockerfile
+          push: true
+          tags: |
+            ${{ steps.meta.outputs.backend_image }}:${{ steps.meta.outputs.tag }}
+            ${{ steps.meta.outputs.backend_image }}:latest
+          cache-from: type=gha,scope=backend
+          cache-to: type=gha,scope=backend,mode=max
+
+      - name: Build and push frontend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          file: ./frontend/Dockerfile
+          push: true
+          tags: |
+            ${{ steps.meta.outputs.frontend_image }}:${{ steps.meta.outputs.tag }}
+            ${{ steps.meta.outputs.frontend_image }}:latest
+          cache-from: type=gha,scope=frontend
+          cache-to: type=gha,scope=frontend,mode=max
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.0.3
+        env:
+          BACKEND_IMAGE: ${{ needs.build-and-push.outputs.backend_image }}
+          FRONTEND_IMAGE: ${{ needs.build-and-push.outputs.frontend_image }}
+          TAG: ${{ needs.build-and-push.outputs.tag }}
+          GHCR_USER: ${{ github.actor }}
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          port: ${{ secrets.DEPLOY_PORT }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_KEY }}
+          envs: BACKEND_IMAGE,FRONTEND_IMAGE,TAG,GHCR_USER,GHCR_TOKEN
+          script: |
+            set -euo pipefail
+            DEPLOY_DIR="$HOME/rulescope"
+            mkdir -p "$DEPLOY_DIR"
+            cd "$DEPLOY_DIR"
+
+            echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USER" --password-stdin
+
+            cat > docker-compose.yml <<EOF
+            services:
+              backend:
+                image: ${BACKEND_IMAGE}:${TAG}
+                container_name: rulescope_backend
+                restart: always
+                ports:
+                  - "8081:8081"
+              frontend:
+                image: ${FRONTEND_IMAGE}:${TAG}
+                container_name: rulescope_frontend
+                restart: always
+                ports:
+                  - "8080:7323"
+                depends_on:
+                  - backend
+            EOF
+
+            docker compose pull
+            docker compose up -d
+            docker logout ghcr.io || true
+            docker image prune -f
