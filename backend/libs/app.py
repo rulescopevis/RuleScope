@@ -44,6 +44,7 @@ from generate_card_example import *
 from constraintMapGenerator import generate_constraint_map
 from detection_script_builder import build_detection_script
 from main import generate_validation_rule
+from llms import get_api_config, save_api_config
 import pandas as pd
 import json
 import time
@@ -317,6 +318,26 @@ def api_workflow_mode():
             return jsonify({'error': 'Invalid workflow mode'}), 400
         updated_mode = set_workflow_mode(mode)
         return jsonify({'workflowMode': updated_mode}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/api-config', methods=['GET'])
+def api_get_api_config():
+    try:
+        return jsonify(get_api_config()), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/api-config', methods=['POST'])
+def api_save_api_config():
+    try:
+        data = request.get_json() or {}
+        saved_config = save_api_config(data)
+        return jsonify(saved_config), 200
+    except ValueError as e:
+        return jsonify({'error': str(e)}), 400
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 

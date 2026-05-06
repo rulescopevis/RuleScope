@@ -62,12 +62,81 @@
       />
     </div>
     <div id="view"></div>
+
+    <el-dialog
+      v-model="showApiConfigDialog"
+      title="API Configuration"
+      width="520px"
+      append-to-body
+      :close-on-click-modal="false"
+      :show-close="!apiConfigSaving"
+      @close="handleApiConfigCancel"
+    >
+      <div v-if="apiConfigLoading" style="padding: 12px 0">Loading...</div>
+      <el-form v-else label-width="110px">
+        <el-form-item label="Provider">
+          <el-select
+            v-model="apiConfigForm.apiProvider"
+            style="width: 100%"
+            @change="handleApiProviderChange"
+          >
+            <el-option
+              v-for="option in apiProviderOptions"
+              :key="option.value"
+              :label="option.label"
+              :value="option.value"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="API Key">
+          <el-input
+            v-model="apiConfigForm.apiKey"
+            type="password"
+            show-password
+            autocomplete="off"
+            placeholder="Enter API key"
+          />
+        </el-form-item>
+        <el-form-item
+          v-if="providerUsesBaseUrl(apiConfigForm.apiProvider)"
+          label="Base URL"
+        >
+          <el-input
+            v-model="apiConfigForm.baseUrl"
+            autocomplete="off"
+            placeholder="Enter base URL"
+          />
+        </el-form-item>
+        <el-form-item label="Model">
+          <el-input
+            v-model="apiConfigForm.model"
+            autocomplete="off"
+            placeholder="Enter model name"
+          />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <span>
+          <el-button :disabled="apiConfigSaving" @click="handleApiConfigCancel">
+            Cancel
+          </el-button>
+          <el-button
+            type="primary"
+            :loading="apiConfigSaving"
+            @click="handleApiConfigSave"
+          >
+            Save
+          </el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, PropType } from "vue";
+import { defineComponent, PropType } from "vue";
 import * as d3 from "d3";
+import { ElMessage } from "element-plus";
 import {
   invalidRange_Compare_Numeric,
   invalidRange_Difference,
@@ -82,8 +151,19 @@ import { renderNumericChart } from "@/render/numeric";
 import { renderDateChart } from "@/render/date";
 import { discrete_continuous_matrix } from "@/render/discrete_continuous_matrix";
 import { continuous_matrix } from "@/render/continuous_matrix";
-import { api_upload_dataset } from "@/utils/callapi";
+import {
+  api_get_api_config,
+  api_save_api_config,
+  api_upload_dataset,
+} from "@/utils/callapi";
 import { multiple_matrix } from "@/render/multiple_matrix";
+
+interface ApiConfigForm {
+  apiProvider: string;
+  apiKey: string;
+  baseUrl: string;
+  model: string;
+}
 
 export default defineComponent({
   name: "ChartView",
@@ -191,6 +271,13 @@ export default defineComponent({
     workflowOptions: { label: string; value: string }[];
     datasetOptions: { label: string; value: string }[];
     isUploading: boolean;
+    showApiConfigDialog: boolean;
+    apiConfigLoading: boolean;
+    apiConfigSaving: boolean;
+    previousWorkflowMode: string;
+    apiConfigForm: ApiConfigForm;
+    apiProviderOptions: { label: string; value: string }[];
+    apiProviderConfigMap: Record<string, ApiConfigForm>;
   } {
     return {
       margin: { top: 50, right: 50, bottom: 50, left: 50 },
@@ -217,6 +304,48 @@ export default defineComponent({
         { label: "animal", value: "animal" },
       ],
       isUploading: false,
+      showApiConfigDialog: false,
+      apiConfigLoading: false,
+      apiConfigSaving: false,
+      previousWorkflowMode: "ollama",
+      apiConfigForm: {
+        apiProvider: "openai",
+        apiKey: "",
+        baseUrl: "https://api.openai.com/v1",
+        model: "gpt-3.5-turbo",
+      },
+      apiProviderOptions: [
+        { label: "OpenAI", value: "openai" },
+        { label: "Anthropic", value: "anthropic" },
+        { label: "DeepSeek", value: "deepseek" },
+        { label: "Qwen", value: "qwen" },
+      ],
+      apiProviderConfigMap: {
+        openai: {
+          apiProvider: "openai",
+          apiKey: "",
+          baseUrl: "https://api.openai.com/v1",
+          model: "gpt-3.5-turbo",
+        },
+        anthropic: {
+          apiProvider: "anthropic",
+          apiKey: "",
+          baseUrl: "",
+          model: "claude-3-sonnet-20240229",
+        },
+        deepseek: {
+          apiProvider: "deepseek",
+          apiKey: "",
+          baseUrl: "https://api.deepseek.com/v1",
+          model: "deepseek-chat",
+        },
+        qwen: {
+          apiProvider: "qwen",
+          apiKey: "",
+          baseUrl: "https://dashscope.aliyuncs.com/compatible-mode/v1",
+          model: "qwen3-max",
+        },
+      },
     };
   },
   methods: {
@@ -573,8 +702,108 @@ export default defineComponent({
         this.datasetOptions.push({ value, label });
       }
     },
+    providerUsesBaseUrl(provider: string) {
+      return provider !== "anthropic";
+    },
+    handleApiProviderChange(provider: string) {
+      const nextConfig = this.apiProviderConfigMap[provider];
+      if (!nextConfig) {
+        return;
+      }
+      this.apiConfigForm = { ...nextConfig };
+    },
+    async openApiConfigDialog() {
+      this.apiConfigLoading = true;
+      this.showApiConfigDialog = true;
+      try {
+        const config = await api_get_api_config();
+        const providerMap: Record<string, ApiConfigForm> = {
+          ...this.apiProviderConfigMap,
+        };
+        Object.entries(config.providers || {}).forEach(([provider, value]) => {
+          providerMap[provider] = {
+            apiProvider: provider,
+            apiKey: value.apiKey || "",
+            baseUrl: value.baseUrl || "",
+            model: value.model || "",
+          };
+        });
+        this.apiProviderConfigMap = providerMap;
+        const provider = config.apiProvider || "openai";
+        this.apiConfigForm = { ...providerMap[provider] };
+      } finally {
+        this.apiConfigLoading = false;
+      }
+    },
     handleWorkflowModeChange() {
+      if (this.workflowMode === "api") {
+        this.openApiConfigDialog().catch((error) => {
+          console.error("Failed to load API config", error);
+          ElMessage.error("Failed to load API configuration.");
+          this.workflowMode = this.previousWorkflowMode;
+          this.showApiConfigDialog = false;
+        });
+        return;
+      }
+
+      this.previousWorkflowMode = this.workflowMode;
       this.$emit("workflow-mode-changed", this.workflowMode);
+    },
+    handleApiConfigCancel() {
+      if (this.apiConfigSaving) {
+        return;
+      }
+      this.showApiConfigDialog = false;
+      this.workflowMode = this.previousWorkflowMode;
+    },
+    async handleApiConfigSave() {
+      const provider = this.apiConfigForm.apiProvider;
+      const apiKey = this.apiConfigForm.apiKey.trim();
+      const baseUrl = this.apiConfigForm.baseUrl.trim();
+      const model = this.apiConfigForm.model.trim();
+
+      if (!apiKey) {
+        ElMessage.warning("Please fill in the API key.");
+        return;
+      }
+
+      if (this.providerUsesBaseUrl(provider) && !baseUrl) {
+        ElMessage.warning("Please fill in the base URL.");
+        return;
+      }
+
+      if (!model) {
+        ElMessage.warning("Please fill in the model name.");
+        return;
+      }
+
+      try {
+        this.apiConfigSaving = true;
+        await api_save_api_config({
+          apiProvider: provider,
+          apiKey,
+          baseUrl,
+          model,
+        });
+        this.apiProviderConfigMap[provider] = {
+          apiProvider: provider,
+          apiKey,
+          baseUrl,
+          model,
+        };
+        this.showApiConfigDialog = false;
+        this.previousWorkflowMode = "api";
+        this.workflowMode = "api";
+        this.$emit("workflow-mode-changed", this.workflowMode);
+        ElMessage.success("API configuration saved.");
+      } catch (error: any) {
+        console.error("Failed to save API config", error);
+        const message =
+          error?.response?.data?.error || "Failed to save API configuration.";
+        ElMessage.error(message);
+      } finally {
+        this.apiConfigSaving = false;
+      }
     },
     triggerFileDialog() {
       const input = this.$refs.uploadInput as HTMLInputElement | undefined;
@@ -659,6 +888,7 @@ export default defineComponent({
   mounted() {
     this.selectedDataset = "";
     this.isEmpty = true;
+    this.previousWorkflowMode = this.workflowMode;
 
     localStorage.removeItem("selectedDataset");
     this.calculateDimensions();

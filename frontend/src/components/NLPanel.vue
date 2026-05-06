@@ -39,6 +39,9 @@ export default defineComponent({
     };
   },
   methods: {
+    clearInput() {
+      this.nlText = "";
+    },
     buildRuleContext() {
       if (!this.chooseCard) return null;
       return {

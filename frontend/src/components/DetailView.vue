@@ -24,6 +24,7 @@
         @create-rule="showCreateRuleModal = true"
       />
       <NLPanel
+        ref="nlPanel"
         :chooseCard="chooseCard"
         @rules-updated="handleRulesUpdated"
         @preview-refine="handleNlPreview"
@@ -342,6 +343,9 @@ export default defineComponent({
         await api_get_refine_rules(refineDict);
         ElMessage({ type: "success", message: "Rules updated." });
         await this.handleRulesUpdated();
+        (
+          this.$refs.nlPanel as { clearInput?: () => void } | undefined
+        )?.clearInput?.();
         this.$emit("rules-refresh-requested");
       } catch (err) {
         ElMessage({ type: "error", message: "Failed to update rules." });
@@ -1218,13 +1222,25 @@ export default defineComponent({
           return;
         }
 
+        const selectedCardIdentity = this.getCurrentCardIdentity();
         const jsonData = await api_get_finalValidation();
-        this.parseToValidationCards(jsonData, datasetLoadingId);
+        await this.parseToValidationCards(
+          jsonData,
+          datasetLoadingId,
+          selectedCardIdentity
+        );
       } catch (error) {
         // console.error("Failed to read JSON file:", error);
       }
     },
-    async parseToValidationCards(data: any, datasetLoadingId: number) {
+    async parseToValidationCards(
+      data: any,
+      datasetLoadingId: number,
+      selectedCardIdentity: {
+        relationType: string;
+        columnName: string[];
+      } | null = null
+    ) {
       // Abandon parsing if dataset has changed
       if (datasetLoadingId !== this.localDatasetLoadingId) {
         return;
@@ -1742,6 +1758,9 @@ export default defineComponent({
           this.addCard(multipleConditionCard);
         }
       }
+
+      this.setCardList();
+      await this.restoreSelectedCard(selectedCardIdentity);
     },
     addCard(card: ValidationCard): void {
       // Do not add card if dataset has changed
@@ -1925,6 +1944,45 @@ export default defineComponent({
     },
     getNormalizedColumnKey(columns: string[] = []): string {
       return [...columns].sort().join("||");
+    },
+    getCurrentCardIdentity(): {
+      relationType: string;
+      columnName: string[];
+    } | null {
+      if (!this.chooseCard) {
+        return null;
+      }
+      return {
+        relationType: this.chooseCard.relationType,
+        columnName: [...this.chooseCard.columnName],
+      };
+    },
+    findMatchingCardByIdentity(identity: {
+      relationType: string;
+      columnName: string[];
+    }): ValidationCard | null {
+      return (
+        this.validationCards.find(
+          (card) =>
+            card.relationType === identity.relationType &&
+            this.areColumnsEqual(card.columnName, identity.columnName)
+        ) || null
+      );
+    },
+    async restoreSelectedCard(
+      identity: { relationType: string; columnName: string[] } | null
+    ): Promise<void> {
+      if (!identity) {
+        return;
+      }
+
+      const matchedCard = this.findMatchingCardByIdentity(identity);
+      if (matchedCard) {
+        await this.handleCardClick(matchedCard);
+        return;
+      }
+
+      this.clearVisualization();
     },
     normalizeColumns(column: string | string[] | undefined): string[] {
       if (!column && column !== "") {

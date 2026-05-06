@@ -805,6 +805,17 @@ export interface UploadDatasetResponse {
   message: string;
 }
 
+export interface ApiProviderConfig {
+  apiKey: string;
+  baseUrl: string;
+  model: string;
+}
+
+export interface ApiConfigResponse {
+  apiProvider: string;
+  providers: Record<string, ApiProviderConfig>;
+}
+
 export async function api_change_dataset(
   dataset: string,
   workflowMode: string
@@ -830,6 +841,31 @@ export async function api_set_workflow_mode(
     });
   } catch (error) {
     console.error("Failed to update workflow mode:", error);
+    throw error;
+  }
+}
+
+export async function api_get_api_config(): Promise<ApiConfigResponse> {
+  try {
+    const response = await axios.get(`${API_BASE_URL}api-config`);
+    return response.data;
+  } catch (error) {
+    console.error("Failed to fetch API config:", error);
+    throw error;
+  }
+}
+
+export async function api_save_api_config(payload: {
+  apiProvider: string;
+  apiKey: string;
+  baseUrl?: string;
+  model?: string;
+}): Promise<ApiConfigResponse> {
+  try {
+    const response = await axios.post(`${API_BASE_URL}api-config`, payload);
+    return response.data;
+  } catch (error) {
+    console.error("Failed to save API config:", error);
     throw error;
   }
 }

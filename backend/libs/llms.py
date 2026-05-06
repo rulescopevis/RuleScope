@@ -7,7 +7,7 @@ from pathlib import Path
 # Try to import necessary libraries, provide hints if import fails
 try:
     from openai import OpenAI
-    from dotenv import load_dotenv
+    from dotenv import load_dotenv, set_key
 except ImportError as e:
     print(f"Missing required library: {e.name}")
     print("Please run 'pip install openai pydantic python-dotenv' to install them.")
@@ -19,10 +19,134 @@ current_dir = Path(__file__).parent
 backend_dir = current_dir.parent
 # Build complete path to .env file
 env_file = backend_dir / 'libs/.env'
+env_example_file = backend_dir / 'libs/.env.example'
+
+API_PROVIDER_SETTINGS = {
+    "openai": {
+        "api_key_env": "OPENAI_API_KEY",
+        "base_url_env": "OPENAI_BASE_URL",
+        "model_env": "OPENAI_MODEL",
+        "default_base_url": "https://api.openai.com/v1",
+        "default_model": "gpt-3.5-turbo",
+    },
+    "anthropic": {
+        "api_key_env": "ANTHROPIC_API_KEY",
+        "base_url_env": None,
+        "model_env": "ANTHROPIC_MODEL",
+        "default_base_url": "",
+        "default_model": "claude-3-sonnet-20240229",
+    },
+    "deepseek": {
+        "api_key_env": "DEEPSEEK_API_KEY",
+        "base_url_env": "DEEPSEEK_BASE_URL",
+        "model_env": "DEEPSEEK_MODEL",
+        "default_base_url": "https://api.deepseek.com/v1",
+        "default_model": "deepseek-chat",
+    },
+    "qwen": {
+        "api_key_env": "QWEN_API_KEY",
+        "base_url_env": "QWEN_BASE_URL",
+        "model_env": "QWEN_MODEL",
+        "default_base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+        "default_model": "qwen3-max",
+    },
+}
+
+API_KEY_PLACEHOLDERS = {
+    "openai": "your_openai_api_key_here",
+    "anthropic": "your_anthropic_api_key_here",
+    "deepseek": "your_deepseek_api_key_here",
+    "qwen": "your_qwen_api_key_here",
+}
+
+
+def ensure_env_file():
+    """Create backend/libs/.env from .env.example when it does not exist."""
+    if env_file.exists():
+        return
+    if env_example_file.exists():
+        env_file.write_text(env_example_file.read_text(encoding="utf-8"), encoding="utf-8")
+    else:
+        env_file.write_text("", encoding="utf-8")
+
+
+def reload_env_file():
+    """Reload runtime environment variables from backend/libs/.env."""
+    ensure_env_file()
+    load_dotenv(env_file, override=True)
+
+
+def _normalize_saved_api_key(provider: str, value: Optional[str]) -> str:
+    if value is None:
+        return ""
+    normalized = str(value).strip()
+    if normalized == API_KEY_PLACEHOLDERS.get(provider, ""):
+        return ""
+    return normalized
+
+
+def get_api_config() -> Dict[str, Any]:
+    """Return API provider settings currently stored in backend/libs/.env."""
+    reload_env_file()
+    api_provider = os.getenv("API_PROVIDER", "deepseek").lower()
+    if api_provider not in API_PROVIDER_SETTINGS:
+        api_provider = "deepseek"
+
+    providers: Dict[str, Dict[str, Any]] = {}
+    for provider, settings in API_PROVIDER_SETTINGS.items():
+        api_key_env = settings["api_key_env"]
+        base_url_env = settings["base_url_env"]
+        model_env = settings["model_env"]
+        providers[provider] = {
+            "apiKey": _normalize_saved_api_key(provider, os.getenv(api_key_env)),
+            "baseUrl": (
+                os.getenv(base_url_env, settings["default_base_url"]).strip()
+                if base_url_env
+                else ""
+            ),
+            "model": os.getenv(model_env, settings["default_model"]).strip(),
+        }
+
+    return {
+        "apiProvider": api_provider,
+        "providers": providers,
+    }
+
+
+def save_api_config(config: Dict[str, Any]) -> Dict[str, Any]:
+    """Persist API provider settings into backend/libs/.env and refresh env vars."""
+    ensure_env_file()
+
+    provider = str(config.get("apiProvider", "")).strip().lower()
+    if provider not in API_PROVIDER_SETTINGS:
+        raise ValueError("Unsupported API provider. Supported: openai, anthropic, deepseek, qwen.")
+
+    settings = API_PROVIDER_SETTINGS[provider]
+    api_key = str(config.get("apiKey", "")).strip()
+    base_url = str(config.get("baseUrl", "")).strip()
+    model = str(config.get("model", "")).strip()
+
+    if not api_key:
+        raise ValueError("API key is required when using API mode.")
+
+    if settings["base_url_env"] and not base_url:
+        base_url = settings["default_base_url"]
+    if not model:
+        model = settings["default_model"]
+
+    set_key(str(env_file), "API_PROVIDER", provider)
+    set_key(str(env_file), settings["api_key_env"], api_key)
+    if settings["base_url_env"]:
+        set_key(str(env_file), settings["base_url_env"], base_url)
+    set_key(str(env_file), settings["model_env"], model)
+
+    reload_env_file()
+    return get_api_config()
 
 # Load .env file
+ensure_env_file()
 if env_file.exists():
-    load_dotenv(env_file)
+    load_dotenv(env_file, override=True)
     print(f"Successfully loaded .env file: {env_file}")
 else:
     print(f"Warning: .env file not found: {env_file}")
@@ -512,5 +636,4 @@ def chat_api(
     
     else:
         raise ValueError(f"Unsupported provider '{provider}'. Please choose 'ollama' or 'api'.")
-
 
