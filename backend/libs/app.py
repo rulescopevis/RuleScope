@@ -108,15 +108,40 @@ def _get_state():
 
 
 current_dataset = LocalProxy(lambda: _get_state()["current_dataset"])
-csv_file_path = LocalProxy(lambda: _get_state()["csv_file_path"])
-json_file_path = LocalProxy(lambda: _get_state()["json_file_path"])
-new_json_file_path = LocalProxy(lambda: _get_state()["new_json_file_path"])
-vis_json_path = LocalProxy(lambda: _get_state()["vis_json_path"])
-table_json_path = LocalProxy(lambda: _get_state()["table_json_path"])
-tableVisInfo_json_path = LocalProxy(lambda: _get_state()["tableVisInfo_json_path"])
-constraint_map_json_path = LocalProxy(lambda: _get_state()["constraint_map_json_path"])
-dataset_path = LocalProxy(lambda: _get_state()["dataset_path"])
 workflow_mode = LocalProxy(lambda: _get_state()["workflow_mode"])
+
+
+class StatePathProxy:
+    def __init__(self, key):
+        self.key = key
+
+    def _get_current_object(self):
+        return _get_state()[self.key]
+
+    def __fspath__(self):
+        path = self._get_current_object()
+        if path is None:
+            raise TypeError("No dataset path is active for this request")
+        return os.fspath(path)
+
+    def __str__(self):
+        return str(self._get_current_object())
+
+    def __repr__(self):
+        return repr(self._get_current_object())
+
+    def __bool__(self):
+        return bool(self._get_current_object())
+
+
+csv_file_path = StatePathProxy("csv_file_path")
+json_file_path = StatePathProxy("json_file_path")
+new_json_file_path = StatePathProxy("new_json_file_path")
+vis_json_path = StatePathProxy("vis_json_path")
+table_json_path = StatePathProxy("table_json_path")
+tableVisInfo_json_path = StatePathProxy("tableVisInfo_json_path")
+constraint_map_json_path = StatePathProxy("constraint_map_json_path")
+dataset_path = StatePathProxy("dataset_path")
 
 
 @app.errorhandler(RequestEntityTooLarge)
@@ -404,7 +429,7 @@ def api_change_dataset():
             
         state["current_dataset"] = dataset
         set_dataset_paths()
-        if not dataset_path:
+        if not state["dataset_path"]:
             return jsonify({'error': f'dataset {dataset} not found'}), 404
         
         return jsonify({'message': f'{dataset} has been selected', 'workflowMode': _get_state()["workflow_mode"]}), 200

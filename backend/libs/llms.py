@@ -2,12 +2,39 @@ import requests
 import json
 import os
 import logging
+import inspect
 from contextlib import contextmanager
 from contextvars import ContextVar
+from itertools import count
 from typing import Union, Generator, List, Dict, Optional, Any
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
+_LLM_CALL_COUNTER = count(1)
+
+_LLM_OPERATION_LABELS = {
+    ("domain_info.py", "domainInfo"): "upload.domain_identification",
+    ("integrity_duplicate.py", "missing_duplicate_flag"): "upload.missing_duplicate_flags",
+    ("order.py", "table_order_condition"): "upload.table_order_condition",
+    ("format_character.py", "character_format"): "rules.character_format",
+    ("range.py", "numeric_range"): "rules.numeric_range",
+    ("comparison_relations_numeric.py", "numeric_compareRelations"): "rules.numeric_comparison",
+    ("comparison_relations_date.py", "date_compareRelations"): "rules.date_comparison",
+    ("comparison_relations_character.py", "character_substring"): "rules.character_substring",
+    ("computational_relations.py", "numeric_formula"): "rules.numeric_formula",
+    ("mapping_and_cardinality.py", "character_lookup"): "rules.mapping_and_cardinality",
+    ("logical_and_condition.py", "condition_logic_simple"): "rules.simple_condition_logic",
+    ("difference_multiple.py", "numeric_difference_multi"): "rules.multi_column_difference",
+    ("duplicate_multiple.py", "duplicate_duplicate_multi"): "rules.multi_column_duplicate",
+    ("logical_and_condition_multiple.py", "condition_logic_multiple"): "rules.multi_condition_logic",
+    ("domain_consistency_same_represent.py", "character_same_represent"): "rules.same_entity_domain_consistency",
+    ("domain_consistency_differenet_domain.py", "character_domain"): "rules.different_domain_consistency",
+    ("difference.py", "numeric_difference"): "rules.numeric_difference",
+    ("sequence.py", "character_sequence"): "rules.sequence",
+    ("refine_NL.py", "refine_NL"): "refine.natural_language",
+    ("nl_panel_intent.py", "detect_nl_intent"): "nl.intent_detection",
+    ("locate_rule.py", "locate_rule_type_and_columns"): "nl.locate_rule",
+}
 
 # Try to import necessary libraries, provide hints if import fails
 try:
@@ -100,6 +127,30 @@ def _normalize_api_config(config: Optional[Dict[str, Any]]) -> Optional[Dict[str
         "baseUrl": base_url,
         "model": model,
     }
+
+
+def _get_llm_caller_info() -> Dict[str, Any]:
+    current_file = Path(__file__).resolve()
+    for frame_info in inspect.stack()[2:]:
+        frame_path = Path(frame_info.filename)
+        if frame_path.resolve() == current_file:
+            continue
+        filename = frame_path.name
+        function_name = frame_info.function
+        return {
+            "operation": _LLM_OPERATION_LABELS.get(
+                (filename, function_name),
+                f"{frame_path.stem}.{function_name}",
+            ),
+            "caller": f"{filename}:{function_name}:{frame_info.lineno}",
+        }
+    return {"operation": "unknown", "caller": "unknown"}
+
+
+def _format_kind(format_value: Union[str, dict]) -> str:
+    if isinstance(format_value, dict):
+        return "json_schema"
+    return str(format_value)
 
 
 @contextmanager
@@ -600,6 +651,8 @@ def chat_api(
         Union[str, dict, Generator, Any]: Returns string, dict, or generator based on parameters.
     """
     # 1. Build common message list
+    call_id = next(_LLM_CALL_COUNTER)
+    caller_info = _get_llm_caller_info()
     messages = []
     if system_prompt:
         messages.append({"role": "system", "content": system_prompt})
@@ -610,6 +663,19 @@ def chat_api(
     # 2. Route to appropriate handler based on provider
     if provider.lower() == 'ollama':
         resolved_ollama_url = os.getenv("OLLAMA_URL", ollama_url)
+        logger.info(
+            "LLM invocation starting: call_id=%s operation=%s caller=%s provider=ollama model=%s format=%s stream=%s user_prompt_chars=%s system_prompt_chars=%s history_messages=%s url=%s",
+            call_id,
+            caller_info["operation"],
+            caller_info["caller"],
+            model,
+            _format_kind(format),
+            stream,
+            len(user_prompt or ""),
+            len(system_prompt or ""),
+            len(history or []),
+            resolved_ollama_url,
+        )
         return _handle_ollama_api(
             messages=messages,
             format=format,
@@ -635,6 +701,21 @@ def chat_api(
             base_url = request_api_config["baseUrl"]
         else:
             base_url = None
+
+        logger.info(
+            "LLM invocation starting: call_id=%s operation=%s caller=%s provider=api api_provider=%s model=%s format=%s stream=%s user_prompt_chars=%s system_prompt_chars=%s history_messages=%s base_url=%s",
+            call_id,
+            caller_info["operation"],
+            caller_info["caller"],
+            api_provider,
+            model,
+            _format_kind(format),
+            stream,
+            len(user_prompt or ""),
+            len(system_prompt or ""),
+            len(history or []),
+            base_url or "<env/default>",
+        )
         
         if api_provider == "qwen":
             return _handle_qwen_api(messages, format, stream, model, max_tokens, temperature, api_key, base_url)
