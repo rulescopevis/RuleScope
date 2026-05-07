@@ -1,10 +1,13 @@
 import requests
 import json
 import os
+import logging
 from contextlib import contextmanager
 from contextvars import ContextVar
 from typing import Union, Generator, List, Dict, Optional, Any
 from pathlib import Path
+
+logger = logging.getLogger(__name__)
 
 # Try to import necessary libraries, provide hints if import fails
 try:
@@ -231,10 +234,10 @@ def _handle_ollama_api(
             return content
             
     except requests.exceptions.RequestException as e:
-        print(f"Ollama request failed: {e}")
+        logger.exception("Ollama request failed: url=%s model=%s", ollama_url, model)
         return {} if format == "json" or isinstance(format, dict) else ""
     except json.JSONDecodeError as e:
-        print(f"JSON parsing failed: {e}")
+        logger.exception("Ollama response JSON parsing failed: url=%s model=%s", ollama_url, model)
         return {} if format == "json" or isinstance(format, dict) else ""
 
 def _handle_qwen_api(
@@ -606,6 +609,7 @@ def chat_api(
 
     # 2. Route to appropriate handler based on provider
     if provider.lower() == 'ollama':
+        resolved_ollama_url = os.getenv("OLLAMA_URL", ollama_url)
         return _handle_ollama_api(
             messages=messages,
             format=format,
@@ -613,7 +617,7 @@ def chat_api(
             model=model,
             max_tokens=max_tokens,
             temperature=temperature,
-            ollama_url=ollama_url,
+            ollama_url=resolved_ollama_url,
             context_length=context_length
         )
     

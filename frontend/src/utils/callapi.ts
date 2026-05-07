@@ -14,6 +14,7 @@ export const api = axios.create({
 const API_BASE_URL = "/api/";
 const API_CONFIG_STORAGE_KEY = "rulescope.apiConfig";
 const WORKFLOW_MODE_STORAGE_KEY = "rulescope.workflowMode";
+const SESSION_ID_STORAGE_KEY = "rulescope.sessionId";
 
 export interface ClientApiConfig {
   apiProvider: string;
@@ -83,14 +84,18 @@ export function saveStoredApiConfig(config: ClientApiConfig): void {
 }
 
 function getEphemeralApiConfigPayload(): ClientApiConfig | undefined {
-  if (
-    typeof window !== "undefined" &&
-    window.localStorage.getItem(WORKFLOW_MODE_STORAGE_KEY) !== "api"
-  ) {
+  if (getStoredWorkflowMode() !== "api") {
     return undefined;
   }
   const config = getStoredApiConfig();
   return config.apiKey ? config : undefined;
+}
+
+function getStoredWorkflowMode(): string {
+  if (typeof window === "undefined") {
+    return "ollama";
+  }
+  return window.localStorage.getItem(WORKFLOW_MODE_STORAGE_KEY) || "ollama";
 }
 
 function saveWorkflowMode(workflowMode: string): void {
@@ -99,6 +104,27 @@ function saveWorkflowMode(workflowMode: string): void {
   }
   window.localStorage.setItem(WORKFLOW_MODE_STORAGE_KEY, workflowMode);
 }
+
+function getSessionId(): string {
+  if (typeof window === "undefined") {
+    return "server";
+  }
+  let sessionId = window.localStorage.getItem(SESSION_ID_STORAGE_KEY);
+  if (!sessionId) {
+    sessionId =
+      typeof crypto !== "undefined" && crypto.randomUUID
+        ? crypto.randomUUID()
+        : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+    window.localStorage.setItem(SESSION_ID_STORAGE_KEY, sessionId);
+  }
+  return sessionId;
+}
+
+axios.interceptors.request.use((config) => {
+  config.headers = config.headers || {};
+  config.headers["X-RuleScope-Session-Id"] = getSessionId();
+  return config;
+});
 
 interface RangeValue {
   start?: number;
@@ -492,6 +518,7 @@ export async function api_nlpanel_handle(payload: {
 }): Promise<any> {
   const response = await axios.post(`${API_BASE_URL}nlpanel`, {
     ...payload,
+    workflowMode: getStoredWorkflowMode(),
     apiConfig: getEphemeralApiConfigPayload(),
   });
   return response.data;
@@ -733,6 +760,7 @@ export async function api_submit_text(
       columnNames: columnNames,
       ruleType: ruleType,
       ruleValue: ruleValue,
+      workflowMode: getStoredWorkflowMode(),
       apiConfig: getEphemeralApiConfigPayload(),
     });
     return response.data.result;
@@ -789,6 +817,7 @@ export async function api_refine_validation_rules(
       {
         validFlag,
         selectInfo,
+        workflowMode: getStoredWorkflowMode(),
         apiConfig: getEphemeralApiConfigPayload(),
       },
       {
@@ -917,15 +946,7 @@ export async function api_change_dataset(
 export async function api_set_workflow_mode(
   workflowMode: string
 ): Promise<void> {
-  try {
-    saveWorkflowMode(workflowMode);
-    await axios.post(`${API_BASE_URL}workflow-mode`, {
-      workflowMode,
-    });
-  } catch (error) {
-    console.error("Failed to update workflow mode:", error);
-    throw error;
-  }
+  saveWorkflowMode(workflowMode);
 }
 
 export async function api_upload_dataset(

@@ -3,6 +3,8 @@ services:
     image: ${BACKEND_IMAGE:-rulescope-backend}:${TAG:-latest}
     container_name: rulescope_backend
     restart: always
+    environment:
+      OLLAMA_URL: ${OLLAMA_URL:-http://host.docker.internal:11434/api/chat}
 
   frontend:
     image: ${FRONTEND_IMAGE:-rulescope-frontend}:${TAG:-latest}

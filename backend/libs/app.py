@@ -1,9 +1,13 @@
 import math
+import logging
 import os
 import re
 import shutil
 import sys
+import threading
 import traceback
+import uuid
+from contextvars import ContextVar
 
 current_dir = os.path.dirname(os.path.abspath(__file__))  
 backend_root = os.path.dirname(current_dir)
@@ -15,6 +19,8 @@ sys.path.append(project_root)
 import atexit
 from flask import Flask, request, jsonify, make_response, send_file
 from flask_cors import CORS
+from werkzeug.exceptions import RequestEntityTooLarge
+from werkzeug.local import LocalProxy
 import copy
 from rule_implementer.detect_mapping_and_cardinality import *
 from rule_implementer.detect_duplicate_multiple import *
@@ -56,25 +62,95 @@ import pandas as pd
 import numpy as np
 
 app = Flask(__name__)
+LOG_LEVEL = getattr(logging, os.getenv("LOG_LEVEL", "INFO").upper(), logging.INFO)
+logging.basicConfig(level=LOG_LEVEL)
+app.logger.setLevel(LOG_LEVEL)
+MAX_UPLOAD_SIZE_BYTES = 100 * 1024 * 1024
+app.config["MAX_CONTENT_LENGTH"] = MAX_UPLOAD_SIZE_BYTES
 CORS(app, resources={r"/api/*": {"origins": "http://localhost:8080"}})
 
-# Current dataset selection, None means no dataset chosen yet
-current_dataset = None
-
-# Global path placeholders
-csv_file_path = None
-json_file_path = None
-new_json_file_path = None
-vis_json_path = None
-table_json_path = None
-tableVisInfo_json_path = None
-constraint_map_json_path = None
-dataset_path = None
 data_path = os.path.join(backend_root, "dataset")
-workflow_mode = "ollama"
 UPLOAD_PREFIX = "upload::"
 UPLOAD_ROOT = os.path.join(backend_root, "uploadFile")
 DATASET_ROOT = os.path.join(backend_root, "dataset")
+
+
+def _new_request_state():
+    return {
+        "current_dataset": None,
+        "csv_file_path": None,
+        "json_file_path": None,
+        "new_json_file_path": None,
+        "vis_json_path": None,
+        "table_json_path": None,
+        "tableVisInfo_json_path": None,
+        "constraint_map_json_path": None,
+        "dataset_path": None,
+        "workflow_mode": "ollama",
+        "session_id": "default",
+        "_lock": threading.RLock(),
+    }
+
+
+_DEFAULT_REQUEST_STATE = _new_request_state()
+_REQUEST_STATE = ContextVar("rulescope_request_state", default=_DEFAULT_REQUEST_STATE)
+_SESSION_STATES = {}
+_SESSION_STATE_LOCK = threading.Lock()
+
+
+def _sanitize_session_id(session_id: str) -> str:
+    sanitized = re.sub(r"[^A-Za-z0-9_-]+", "_", session_id or "").strip("_")
+    return sanitized or uuid.uuid4().hex
+
+
+def _get_state():
+    return _REQUEST_STATE.get()
+
+
+current_dataset = LocalProxy(lambda: _get_state()["current_dataset"])
+csv_file_path = LocalProxy(lambda: _get_state()["csv_file_path"])
+json_file_path = LocalProxy(lambda: _get_state()["json_file_path"])
+new_json_file_path = LocalProxy(lambda: _get_state()["new_json_file_path"])
+vis_json_path = LocalProxy(lambda: _get_state()["vis_json_path"])
+table_json_path = LocalProxy(lambda: _get_state()["table_json_path"])
+tableVisInfo_json_path = LocalProxy(lambda: _get_state()["tableVisInfo_json_path"])
+constraint_map_json_path = LocalProxy(lambda: _get_state()["constraint_map_json_path"])
+dataset_path = LocalProxy(lambda: _get_state()["dataset_path"])
+workflow_mode = LocalProxy(lambda: _get_state()["workflow_mode"])
+
+
+@app.errorhandler(RequestEntityTooLarge)
+def handle_request_entity_too_large(_error):
+    app.logger.warning(
+        "Upload rejected: request body too large; content_length=%s max_upload_size=%s",
+        request.content_length,
+        MAX_UPLOAD_SIZE_BYTES,
+    )
+    return jsonify({
+        "error": "Uploaded file is too large. Maximum upload size is 100 MB."
+    }), 413
+
+
+@app.before_request
+def bind_session_state():
+    raw_session_id = request.headers.get("X-RuleScope-Session-Id", "")
+    session_id = _sanitize_session_id(raw_session_id)
+    with _SESSION_STATE_LOCK:
+        state = _SESSION_STATES.setdefault(session_id, _new_request_state())
+        state["session_id"] = session_id
+    state["_lock"].acquire()
+    _REQUEST_STATE.set(state)
+
+
+@app.teardown_request
+def release_session_state_lock(_exception=None):
+    state = _get_state()
+    lock = state.get("_lock")
+    if lock:
+        try:
+            lock.release()
+        except RuntimeError:
+            pass
 
 # Remove temporary validation and constraint files inside dataset/upload roots
 def clear_temp_files():
@@ -96,77 +172,77 @@ def clear_temp_files():
 
 # Configure file paths based on the currently selected dataset
 def set_dataset_paths():
-    global csv_file_path, json_file_path, new_json_file_path, vis_json_path, table_json_path, tableVisInfo_json_path, constraint_map_json_path, dataset_path, timestamp
+    state = _get_state()
 
-    if dataset_path != None:
+    if state["dataset_path"] is not None:
         # Delete temp files from previous dataset selection
-        temp_files = [new_json_file_path, constraint_map_json_path]
+        temp_files = [state["new_json_file_path"], state["constraint_map_json_path"]]
         for temp_file in temp_files:
             if temp_file and os.path.exists(temp_file):
                 os.remove(temp_file)
-    timestamp = int(math.floor(time.time()))
+    timestamp = time.time_ns()
     
-    if current_dataset == "basketball":
+    if state["current_dataset"] == "basketball":
         # Basketball dataset path
-        dataset_path = os.path.join(DATASET_ROOT, "basketball") + os.sep
-        csv_file_path = dataset_path + "test-data.csv"
-    elif current_dataset == "electrocar1":
+        state["dataset_path"] = os.path.join(DATASET_ROOT, "basketball") + os.sep
+        state["csv_file_path"] = state["dataset_path"] + "test-data.csv"
+    elif state["current_dataset"] == "electrocar1":
         # Electrocar dataset path
-        dataset_path = os.path.join(DATASET_ROOT, "electrocar") + os.sep
-        csv_file_path = dataset_path + "test-data.csv"
-    elif current_dataset == "animal":
+        state["dataset_path"] = os.path.join(DATASET_ROOT, "electrocar") + os.sep
+        state["csv_file_path"] = state["dataset_path"] + "test-data.csv"
+    elif state["current_dataset"] == "animal":
         # Animal dataset path
-        dataset_path = os.path.join(DATASET_ROOT, "animal") + os.sep
-        csv_file_path = dataset_path + "test-data.csv"
-    elif current_dataset:
-        dataset_key = current_dataset
+        state["dataset_path"] = os.path.join(DATASET_ROOT, "animal") + os.sep
+        state["csv_file_path"] = state["dataset_path"] + "test-data.csv"
+    elif state["current_dataset"]:
+        dataset_key = state["current_dataset"]
         if dataset_key.startswith(UPLOAD_PREFIX):
             dataset_key = dataset_key[len(UPLOAD_PREFIX):]
         custom_dataset_path = os.path.join(UPLOAD_ROOT, dataset_key)
         if os.path.isdir(custom_dataset_path):
-            dataset_path = custom_dataset_path + os.sep
-            csv_file_path = dataset_path + "test-data.csv"
+            state["dataset_path"] = custom_dataset_path + os.sep
+            state["csv_file_path"] = state["dataset_path"] + "test-data.csv"
         else:
-            dataset_path = None
-            csv_file_path = None
-            json_file_path = None
-            new_json_file_path = None
-            vis_json_path = None
-            table_json_path = None
-            tableVisInfo_json_path = None
-            constraint_map_json_path = None
-            print(f"Dataset not found: {current_dataset}")
+            state["dataset_path"] = None
+            state["csv_file_path"] = None
+            state["json_file_path"] = None
+            state["new_json_file_path"] = None
+            state["vis_json_path"] = None
+            state["table_json_path"] = None
+            state["tableVisInfo_json_path"] = None
+            state["constraint_map_json_path"] = None
+            print(f"Dataset not found: {state['current_dataset']}")
             return
     else:
-        csv_file_path = None
-        json_file_path = None
-        new_json_file_path = None
-        vis_json_path = None
-        table_json_path = None
-        tableVisInfo_json_path = None
-        constraint_map_json_path = None
+        state["csv_file_path"] = None
+        state["json_file_path"] = None
+        state["new_json_file_path"] = None
+        state["vis_json_path"] = None
+        state["table_json_path"] = None
+        state["tableVisInfo_json_path"] = None
+        state["constraint_map_json_path"] = None
     
-    if dataset_path:
-        json_file_path = dataset_path + "validation_rules.json"
-        new_json_file_path = dataset_path + f"validation_rules_{timestamp}.json"
-        with open(new_json_file_path, 'w', encoding='utf-8') as file:
-            json_data = json.load(open(json_file_path, 'r', encoding='utf-8'))
+    if state["dataset_path"]:
+        state["json_file_path"] = state["dataset_path"] + "validation_rules.json"
+        state["new_json_file_path"] = state["dataset_path"] + f"validation_rules_{timestamp}.json"
+        with open(state["new_json_file_path"], 'w', encoding='utf-8') as file:
+            json_data = json.load(open(state["json_file_path"], 'r', encoding='utf-8'))
             json.dump(json_data, file, ensure_ascii=False, indent=4)
-        vis_json_path = dataset_path + "visInfo.json"
-        table_json_path = dataset_path + "table_info.json"
-        tableVisInfo_json_path = dataset_path + "tableVisInfo.json"
-        constraint_map_json_path = dataset_path + f"constraintMap_{timestamp}.json"
-        generate_constraint_map(new_json_file_path, csv_file_path, constraint_map_json_path)
+        state["vis_json_path"] = state["dataset_path"] + "visInfo.json"
+        state["table_json_path"] = state["dataset_path"] + "table_info.json"
+        state["tableVisInfo_json_path"] = state["dataset_path"] + "tableVisInfo.json"
+        state["constraint_map_json_path"] = state["dataset_path"] + f"constraintMap_{timestamp}.json"
+        generate_constraint_map(state["new_json_file_path"], state["csv_file_path"], state["constraint_map_json_path"])
 
 
 def set_workflow_mode(mode: str):
-    global workflow_mode
-    workflow_mode = "api" if mode == "api" else "ollama"
-    return workflow_mode
+    state = _get_state()
+    state["workflow_mode"] = "api" if mode == "api" else "ollama"
+    return state["workflow_mode"]
 
 
 def get_model_from_workflow():
-    return None if workflow_mode == "ollama" else "api"
+    return None if _get_state()["workflow_mode"] == "ollama" else "api"
 
 
 def get_request_api_config(data=None):
@@ -185,6 +261,15 @@ def get_request_api_config(data=None):
     return None
 
 
+def get_request_workflow_mode(data=None):
+    if data is None and request.is_json:
+        data = request.get_json(silent=True) or {}
+    mode = data.get("workflowMode") if isinstance(data, dict) else None
+    if not mode and request.form:
+        mode = request.form.get("workflowMode")
+    return mode if mode in ("ollama", "api") else None
+
+
 def sanitize_dataset_name(filename: str) -> str:
     base_name = os.path.splitext(os.path.basename(filename or ""))[0]
     sanitized = re.sub(r"[^A-Za-z0-9_-]+", "_", base_name).strip("_")
@@ -195,7 +280,6 @@ def sanitize_dataset_name(filename: str) -> str:
 
 def regenerate_constraint_map():
     """Rebuild the constraint map after rules change."""
-    global new_json_file_path, csv_file_path, constraint_map_json_path
     if not (
         new_json_file_path
         and csv_file_path
@@ -308,7 +392,7 @@ atexit.register(clear_temp_files)
 @app.route('/api/change-dataset', methods=['POST'])
 def api_change_dataset():
     try:
-        global current_dataset
+        state = _get_state()
         data = request.get_json()
         dataset = data.get('dataset')
         mode = data.get('workflowMode')
@@ -318,13 +402,12 @@ def api_change_dataset():
         # if dataset not in ["basketball", "electrocar", "football", "electrocar-processed"]:
         #     return jsonify({'error': 'invalid dataset name'}), 400
             
-        clear_temp_files()
-        current_dataset = dataset
+        state["current_dataset"] = dataset
         set_dataset_paths()
         if not dataset_path:
             return jsonify({'error': f'dataset {dataset} not found'}), 404
         
-        return jsonify({'message': f'{dataset} has been selected', 'workflowMode': workflow_mode}), 200
+        return jsonify({'message': f'{dataset} has been selected', 'workflowMode': _get_state()["workflow_mode"]}), 200
     except Exception as e:
         traceback.print_exc()
         return jsonify({'error': str(e)}), 500
@@ -361,50 +444,117 @@ def api_save_api_config():
 @app.route('/api/upload-dataset', methods=['POST'])
 def api_upload_dataset():
     try:
-        global current_dataset
+        state = _get_state()
+        app.logger.info(
+            "Upload request received: content_length=%s workflow_mode=%s session_id=%s",
+            request.content_length,
+            state["workflow_mode"],
+            state["session_id"],
+        )
         if 'file' not in request.files:
+            app.logger.warning("Upload rejected: no multipart file field named 'file'")
             return jsonify({'error': 'No file provided'}), 400
 
         file = request.files['file']
         if not file or not file.filename:
+            app.logger.warning("Upload rejected: empty file or missing filename")
             return jsonify({'error': 'Invalid file'}), 400
 
         workflow_mode_form = request.form.get('workflowMode')
         if workflow_mode_form:
             set_workflow_mode(workflow_mode_form)
+            app.logger.info("Upload workflow mode set from form: %s", _get_state()["workflow_mode"])
 
         if not file.filename.lower().endswith('.csv'):
+            app.logger.warning("Upload rejected: unsupported filename=%s", file.filename)
             return jsonify({'error': 'Only .csv files are supported at the moment'}), 400
 
         dataset_name = sanitize_dataset_name(file.filename)
-        os.makedirs(UPLOAD_ROOT, exist_ok=True)
-        dataset_dir = os.path.join(UPLOAD_ROOT, dataset_name)
+        session_upload_root = os.path.join(UPLOAD_ROOT, state["session_id"])
+        os.makedirs(session_upload_root, exist_ok=True)
+        dataset_dir = os.path.join(session_upload_root, dataset_name)
         if os.path.exists(dataset_dir):
             shutil.rmtree(dataset_dir)
         os.makedirs(dataset_dir, exist_ok=True)
 
         dataset_csv_path = os.path.join(dataset_dir, 'test-data.csv')
         file.save(dataset_csv_path)
+        app.logger.info(
+            "Upload file saved: original_filename=%s dataset_name=%s path=%s size_bytes=%s",
+            file.filename,
+            dataset_name,
+            dataset_csv_path,
+            os.path.getsize(dataset_csv_path),
+        )
 
         df = pd.read_csv(dataset_csv_path)
+        app.logger.info(
+            "Upload CSV parsed: dataset_name=%s rows=%s columns=%s",
+            dataset_name,
+            len(df.index),
+            len(df.columns),
+        )
         model_param = get_model_from_workflow()
+        app.logger.info(
+            "Upload rule generation starting: dataset_name=%s workflow_mode=%s model_param=%s ollama_url=%s",
+            dataset_name,
+            _get_state()["workflow_mode"],
+            model_param,
+            os.getenv("OLLAMA_URL", "http://localhost:11434/api/chat"),
+        )
         with use_api_config(get_request_api_config()):
-            generate_validation_rule(df, dataset_name, model_param, dataset_dir, orderConditionDict={})
+            generated_table_info_path = generate_validation_rule(
+                df,
+                dataset_name,
+                model_param,
+                dataset_dir,
+                orderConditionDict={},
+            )
 
         validation_rules_path = os.path.join(dataset_dir, 'validation_rules.json')
+        if not generated_table_info_path or not os.path.exists(validation_rules_path):
+            app.logger.error(
+                "Upload rule generation failed: dataset_name=%s generated_table_info_path=%s validation_rules_exists=%s",
+                dataset_name,
+                generated_table_info_path,
+                os.path.exists(validation_rules_path),
+            )
+            return jsonify({
+                'error': (
+                    'Dataset was uploaded, but validation rule generation failed. '
+                    'If you are using Ollama in Docker, make sure Ollama is running on the host '
+                    'and OLLAMA_URL points to http://host.docker.internal:11434/api/chat.'
+                )
+            }), 502
+
         final_validation_path = os.path.join(dataset_dir, 'finalValidation.json')
         shutil.copyfile(validation_rules_path, final_validation_path)
+        app.logger.info(
+            "Upload rule generation completed: dataset_name=%s validation_rules_path=%s",
+            dataset_name,
+            validation_rules_path,
+        )
 
-        clear_temp_files()
-        current_dataset = f"{UPLOAD_PREFIX}{dataset_name}"
+        state["current_dataset"] = f"{UPLOAD_PREFIX}{state['session_id']}/{dataset_name}"
         set_dataset_paths()
+        app.logger.info(
+            "Upload dataset activated: dataset=%s session_id=%s",
+            state["current_dataset"],
+            state["session_id"],
+        )
 
         return jsonify({
             'message': 'Dataset uploaded successfully',
-            'dataset': current_dataset,
+            'dataset': state["current_dataset"],
             'displayName': dataset_name
         }), 200
     except Exception as e:
+        app.logger.exception(
+            "Upload failed with unexpected exception: content_length=%s session_id=%s",
+            request.content_length,
+            _get_state().get("session_id"),
+        )
+        traceback.print_exc()
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/detect_lookup', methods=['POST'])
@@ -1863,6 +2013,9 @@ def api_refine_validation_rules():
         # Read request payload
         data = request.get_json()
         api_config = get_request_api_config(data)
+        mode = get_request_workflow_mode(data)
+        if mode:
+            set_workflow_mode(mode)
         
         # Extract required params
         valid_flag = data.get('validFlag', False)
@@ -1935,6 +2088,9 @@ def api_submit_text():
         # Read request payload
         data = request.get_json()
         api_config = get_request_api_config(data)
+        mode = get_request_workflow_mode(data)
+        if mode:
+            set_workflow_mode(mode)
         input_text = data.get('text', "")
         column_names = data.get('columnNames', [])
         rule_type = data.get('ruleType', "")
@@ -2020,8 +2176,6 @@ def api_detect_multiple_logic_condition():
 
 @app.route('/api/get_rule_creation_info', methods=['GET'])
 def api_get_rule_creation_info():
-    global new_json_file_path, json_file_path, table_json_path
-    
     target_path = new_json_file_path if new_json_file_path and os.path.exists(new_json_file_path) else json_file_path
     
     if not target_path or not os.path.exists(target_path):
@@ -2061,6 +2215,9 @@ def api_get_rule_creation_info():
 def api_nlpanel():
     data = request.json or {}
     api_config = get_request_api_config(data)
+    mode = get_request_workflow_mode(data)
+    if mode:
+        set_workflow_mode(mode)
     nl_text = data.get('naturalLanguage', '')
     rule_context = data.get('ruleContext')
     create_rule_payload = data.get('createRule')
