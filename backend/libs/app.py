@@ -3,10 +3,14 @@ import os
 import re
 import shutil
 import sys
+import traceback
 
 current_dir = os.path.dirname(os.path.abspath(__file__))  
-project_root = os.path.dirname(os.path.dirname(current_dir))  
-sys.path.append(project_root)  
+backend_root = os.path.dirname(current_dir)
+project_root = os.path.dirname(backend_root)
+sys.path.append(current_dir)
+sys.path.append(backend_root)
+sys.path.append(project_root)
 
 import atexit
 from flask import Flask, request, jsonify, make_response, send_file
@@ -66,11 +70,11 @@ table_json_path = None
 tableVisInfo_json_path = None
 constraint_map_json_path = None
 dataset_path = None
-data_path = "/backend/dataset/"
+data_path = os.path.join(backend_root, "dataset")
 workflow_mode = "ollama"
 UPLOAD_PREFIX = "upload::"
-UPLOAD_ROOT = os.path.join(project_root, "backend", "uploadFile")
-DATASET_ROOT = os.path.join(project_root, "backend", "dataset")
+UPLOAD_ROOT = os.path.join(backend_root, "uploadFile")
+DATASET_ROOT = os.path.join(backend_root, "dataset")
 
 # Remove temporary validation and constraint files inside dataset/upload roots
 def clear_temp_files():
@@ -104,15 +108,15 @@ def set_dataset_paths():
     
     if current_dataset == "basketball":
         # Basketball dataset path
-        dataset_path = project_root + "/backend/dataset/basketball/"
+        dataset_path = os.path.join(DATASET_ROOT, "basketball") + os.sep
         csv_file_path = dataset_path + "test-data.csv"
     elif current_dataset == "electrocar1":
         # Electrocar dataset path
-        dataset_path = project_root + "/backend/dataset/electrocar/"
+        dataset_path = os.path.join(DATASET_ROOT, "electrocar") + os.sep
         csv_file_path = dataset_path + "test-data.csv"
     elif current_dataset == "animal":
         # Animal dataset path
-        dataset_path = project_root + "/backend/dataset/animal/"
+        dataset_path = os.path.join(DATASET_ROOT, "animal") + os.sep
         csv_file_path = dataset_path + "test-data.csv"
     elif current_dataset:
         dataset_key = current_dataset
@@ -306,6 +310,7 @@ def api_change_dataset():
         
         return jsonify({'message': f'{dataset} has been selected', 'workflowMode': workflow_mode}), 200
     except Exception as e:
+        traceback.print_exc()
         return jsonify({'error': str(e)}), 500
 
 
