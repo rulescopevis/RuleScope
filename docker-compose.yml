@@ -1,18 +1,12 @@
 services:
   backend:
-    build: 
-      context: ./backend
-      dockerfile: Dockerfile
-    container_name: my_python_backend
+    image: ${BACKEND_IMAGE:-rulescope-backend}:${TAG:-latest}
+    container_name: rulescope_backend
     restart: always
-    ports:
-      - "8081:8081"
 
   frontend:
-    build: 
-      context: ./frontend
-      dockerfile: Dockerfile
-    container_name: my_vue_frontend
+    image: ${FRONTEND_IMAGE:-rulescope-frontend}:${TAG:-latest}
+    container_name: rulescope_frontend
     restart: always
     ports:
       - "8080:80"

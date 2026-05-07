@@ -420,7 +420,7 @@ export default defineComponent({
       const selectedExamples = this.getSelectedExamples();
 
       // First send selected rules to backend
-      fetch("http://localhost:8081/api/get_refine_rules", {
+      fetch("/api/get_refine_rules", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

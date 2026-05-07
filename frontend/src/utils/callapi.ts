@@ -8,10 +8,10 @@ import {
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: "http://localhost:8081",
+  baseURL: "",
 });
 
-const API_BASE_URL = "http://localhost:8081/api/";
+const API_BASE_URL = "/api/";
 
 interface RangeValue {
   start?: number;
