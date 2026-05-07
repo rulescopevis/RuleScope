@@ -4,12 +4,19 @@ RuleScope is an interactive system designed to support the generation, verificat
 
 ## Table of Contents
 
+- [Online Demo](#online-demo)
 - [Dependencies and Installation](#dependencies-and-installation)
   - [Backend Dependencies](#backend-dependencies)
   - [Frontend Dependencies](#frontend-dependencies)
 - [LLM Configuration](#llm-configuration)
 - [Project Startup](#project-startup)
 - [Project Structure](#project-structure)
+
+## Online Demo
+
+An online demo is available at [https://rulescope.zjuidg.org](https://rulescope.zjuidg.org).
+
+For the online demo, Ollama mode does not work because Ollama requests are made from the RuleScope backend, and the hosted backend cannot access an Ollama instance running on your own PC. Please use API mode when trying the online demo.
 
 ## Dependencies and Installation
 
