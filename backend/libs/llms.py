@@ -1,13 +1,15 @@
 import requests
 import json
 import os
+from contextlib import contextmanager
+from contextvars import ContextVar
 from typing import Union, Generator, List, Dict, Optional, Any
 from pathlib import Path
 
 # Try to import necessary libraries, provide hints if import fails
 try:
     from openai import OpenAI
-    from dotenv import load_dotenv, set_key
+    from dotenv import load_dotenv
 except ImportError as e:
     print(f"Missing required library: {e.name}")
     print("Please run 'pip install openai pydantic python-dotenv' to install them.")
@@ -20,6 +22,7 @@ backend_dir = current_dir.parent
 # Build complete path to .env file
 env_file = backend_dir / 'libs/.env'
 env_example_file = backend_dir / 'libs/.env.example'
+_REQUEST_API_CONFIG: ContextVar[Optional[Dict[str, Any]]] = ContextVar("request_api_config", default=None)
 
 API_PROVIDER_SETTINGS = {
     "openai": {
@@ -52,14 +55,6 @@ API_PROVIDER_SETTINGS = {
     },
 }
 
-API_KEY_PLACEHOLDERS = {
-    "openai": "your_openai_api_key_here",
-    "anthropic": "your_anthropic_api_key_here",
-    "deepseek": "your_deepseek_api_key_here",
-    "qwen": "your_qwen_api_key_here",
-}
-
-
 def ensure_env_file():
     """Create backend/libs/.env from .env.example when it does not exist."""
     if env_file.exists():
@@ -76,17 +71,47 @@ def reload_env_file():
     load_dotenv(env_file, override=True)
 
 
-def _normalize_saved_api_key(provider: str, value: Optional[str]) -> str:
-    if value is None:
-        return ""
-    normalized = str(value).strip()
-    if normalized == API_KEY_PLACEHOLDERS.get(provider, ""):
-        return ""
-    return normalized
+def _normalize_api_config(config: Optional[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
+    if not isinstance(config, dict):
+        return None
+
+    provider = str(config.get("apiProvider", "")).strip().lower()
+    if provider not in API_PROVIDER_SETTINGS:
+        raise ValueError("Unsupported API provider. Supported: openai, anthropic, deepseek, qwen.")
+
+    api_key = str(config.get("apiKey", "")).strip()
+    if not api_key:
+        raise ValueError("API key is required when using API mode.")
+
+    settings = API_PROVIDER_SETTINGS[provider]
+    base_url = str(config.get("baseUrl", "")).strip()
+    model = str(config.get("model", "")).strip()
+    if settings["base_url_env"] and not base_url:
+        base_url = settings["default_base_url"]
+    if not model:
+        model = settings["default_model"]
+
+    return {
+        "apiProvider": provider,
+        "apiKey": api_key,
+        "baseUrl": base_url,
+        "model": model,
+    }
+
+
+@contextmanager
+def use_api_config(config: Optional[Dict[str, Any]]):
+    """Temporarily attach API credentials to the current request context."""
+    normalized = _normalize_api_config(config) if config else None
+    token = _REQUEST_API_CONFIG.set(normalized)
+    try:
+        yield
+    finally:
+        _REQUEST_API_CONFIG.reset(token)
 
 
 def get_api_config() -> Dict[str, Any]:
-    """Return API provider settings currently stored in backend/libs/.env."""
+    """Return API provider defaults without exposing stored credentials."""
     reload_env_file()
     api_provider = os.getenv("API_PROVIDER", "deepseek").lower()
     if api_provider not in API_PROVIDER_SETTINGS:
@@ -98,7 +123,7 @@ def get_api_config() -> Dict[str, Any]:
         base_url_env = settings["base_url_env"]
         model_env = settings["model_env"]
         providers[provider] = {
-            "apiKey": _normalize_saved_api_key(provider, os.getenv(api_key_env)),
+            "apiKey": "",
             "baseUrl": (
                 os.getenv(base_url_env, settings["default_base_url"]).strip()
                 if base_url_env
@@ -112,36 +137,6 @@ def get_api_config() -> Dict[str, Any]:
         "providers": providers,
     }
 
-
-def save_api_config(config: Dict[str, Any]) -> Dict[str, Any]:
-    """Persist API provider settings into backend/libs/.env and refresh env vars."""
-    ensure_env_file()
-
-    provider = str(config.get("apiProvider", "")).strip().lower()
-    if provider not in API_PROVIDER_SETTINGS:
-        raise ValueError("Unsupported API provider. Supported: openai, anthropic, deepseek, qwen.")
-
-    settings = API_PROVIDER_SETTINGS[provider]
-    api_key = str(config.get("apiKey", "")).strip()
-    base_url = str(config.get("baseUrl", "")).strip()
-    model = str(config.get("model", "")).strip()
-
-    if not api_key:
-        raise ValueError("API key is required when using API mode.")
-
-    if settings["base_url_env"] and not base_url:
-        base_url = settings["default_base_url"]
-    if not model:
-        model = settings["default_model"]
-
-    set_key(str(env_file), "API_PROVIDER", provider)
-    set_key(str(env_file), settings["api_key_env"], api_key)
-    if settings["base_url_env"]:
-        set_key(str(env_file), settings["base_url_env"], base_url)
-    set_key(str(env_file), settings["model_env"], model)
-
-    reload_env_file()
-    return get_api_config()
 
 # Load .env file
 ensure_env_file()
@@ -249,7 +244,8 @@ def _handle_qwen_api(
     model: Optional[str], 
     max_tokens: Optional[int], 
     temperature: Optional[float], 
-    api_key: Optional[str]
+    api_key: Optional[str],
+    base_url: Optional[str] = None,
 ) -> Union[str, dict, Generator, Any]:
     """
     Handle Qwen API calls.
@@ -277,7 +273,7 @@ def _handle_qwen_api(
     if not resolved_api_key:
         raise ValueError("Qwen API key must be provided via the 'api_key' argument or the 'QWEN_API_KEY' environment variable.")
 
-    base_url = os.getenv("QWEN_BASE_URL", "https://dashscope.aliyuncs.com/compatible-mode/v1")
+    base_url = base_url or os.getenv("QWEN_BASE_URL", "https://dashscope.aliyuncs.com/compatible-mode/v1")
 
     try:
         client = OpenAI(api_key=resolved_api_key, base_url=base_url)
@@ -330,7 +326,8 @@ def _handle_deepseek_api(
     model: Optional[str], 
     max_tokens: Optional[int], 
     temperature: Optional[float], 
-    api_key: Optional[str]
+    api_key: Optional[str],
+    base_url: Optional[str] = None,
 ) -> Union[str, dict, Generator, Any]:
     """
     Handle DeepSeek API calls.
@@ -358,7 +355,7 @@ def _handle_deepseek_api(
     if not resolved_api_key:
         raise ValueError("DeepSeek API key must be provided via the 'api_key' argument or the 'DEEPSEEK_API_KEY' environment variable.")
 
-    base_url = os.getenv("DEEPSEEK_BASE_URL", "https://api.deepseek.com/v1")
+    base_url = base_url or os.getenv("DEEPSEEK_BASE_URL", "https://api.deepseek.com/v1")
 
     try:
         client = OpenAI(api_key=resolved_api_key, base_url=base_url)
@@ -411,7 +408,8 @@ def _handle_openai_api(
     model: Optional[str], 
     max_tokens: Optional[int], 
     temperature: Optional[float], 
-    api_key: Optional[str]
+    api_key: Optional[str],
+    base_url: Optional[str] = None,
 ) -> Union[str, dict, Generator, Any]:
     """
     Handle OpenAI API calls.
@@ -438,7 +436,7 @@ def _handle_openai_api(
     if not resolved_api_key:
         raise ValueError("OpenAI API key must be provided via the 'api_key' argument or the 'OPENAI_API_KEY' environment variable.")
 
-    base_url = os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1")
+    base_url = base_url or os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1")
 
     try:
         client = OpenAI(api_key=resolved_api_key, base_url=base_url)
@@ -620,15 +618,26 @@ def chat_api(
         )
     
     elif provider.lower() == 'api':
-        # API mode: Read configuration from .env file
-        api_provider = os.getenv("API_PROVIDER", "deepseek").lower()
+        # API mode: prefer request-scoped config, then explicit api_key/env fallback.
+        request_api_config = _REQUEST_API_CONFIG.get()
+        api_provider = (
+            str(request_api_config.get("apiProvider", "")).lower()
+            if request_api_config
+            else os.getenv("API_PROVIDER", "deepseek").lower()
+        )
+        if request_api_config:
+            api_key = request_api_config["apiKey"]
+            model = request_api_config["model"]
+            base_url = request_api_config["baseUrl"]
+        else:
+            base_url = None
         
         if api_provider == "qwen":
-            return _handle_qwen_api(messages, format, stream, model, max_tokens, temperature, api_key)
+            return _handle_qwen_api(messages, format, stream, model, max_tokens, temperature, api_key, base_url)
         elif api_provider == "deepseek":
-            return _handle_deepseek_api(messages, format, stream, model, max_tokens, temperature, api_key)
+            return _handle_deepseek_api(messages, format, stream, model, max_tokens, temperature, api_key, base_url)
         elif api_provider == "openai":
-            return _handle_openai_api(messages, format, stream, model, max_tokens, temperature, api_key)
+            return _handle_openai_api(messages, format, stream, model, max_tokens, temperature, api_key, base_url)
         elif api_provider == "anthropic":
             return _handle_anthropic_api(messages, format, stream, model, max_tokens, temperature, api_key)
         else:
@@ -636,4 +645,3 @@ def chat_api(
     
     else:
         raise ValueError(f"Unsupported provider '{provider}'. Please choose 'ollama' or 'api'.")
-

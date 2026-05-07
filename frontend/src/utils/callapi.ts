@@ -12,6 +12,93 @@ export const api = axios.create({
 });
 
 const API_BASE_URL = "/api/";
+const API_CONFIG_STORAGE_KEY = "rulescope.apiConfig";
+const WORKFLOW_MODE_STORAGE_KEY = "rulescope.workflowMode";
+
+export interface ClientApiConfig {
+  apiProvider: string;
+  apiKey: string;
+  baseUrl: string;
+  model: string;
+}
+
+export const defaultApiProviderConfigMap: Record<string, ClientApiConfig> = {
+  openai: {
+    apiProvider: "openai",
+    apiKey: "",
+    baseUrl: "https://api.openai.com/v1",
+    model: "gpt-3.5-turbo",
+  },
+  anthropic: {
+    apiProvider: "anthropic",
+    apiKey: "",
+    baseUrl: "",
+    model: "claude-3-sonnet-20240229",
+  },
+  deepseek: {
+    apiProvider: "deepseek",
+    apiKey: "",
+    baseUrl: "https://api.deepseek.com/v1",
+    model: "deepseek-chat",
+  },
+  qwen: {
+    apiProvider: "qwen",
+    apiKey: "",
+    baseUrl: "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    model: "qwen3-max",
+  },
+};
+
+export function getStoredApiConfig(): ClientApiConfig {
+  if (typeof window === "undefined") {
+    return { ...defaultApiProviderConfigMap.openai };
+  }
+  try {
+    const raw = window.localStorage.getItem(API_CONFIG_STORAGE_KEY);
+    if (!raw) {
+      return { ...defaultApiProviderConfigMap.openai };
+    }
+    const parsed = JSON.parse(raw);
+    const provider = parsed?.apiProvider || "openai";
+    const defaults =
+      defaultApiProviderConfigMap[provider] ||
+      defaultApiProviderConfigMap.openai;
+    return {
+      ...defaults,
+      ...parsed,
+      apiProvider: provider,
+      apiKey: parsed?.apiKey || "",
+    };
+  } catch (error) {
+    console.error("Failed to read API config from localStorage:", error);
+    return { ...defaultApiProviderConfigMap.openai };
+  }
+}
+
+export function saveStoredApiConfig(config: ClientApiConfig): void {
+  if (typeof window === "undefined") {
+    return;
+  }
+  window.localStorage.setItem(API_CONFIG_STORAGE_KEY, JSON.stringify(config));
+}
+
+function getEphemeralApiConfigPayload(): ClientApiConfig | undefined {
+  if (
+    typeof window !== "undefined" &&
+    window.localStorage.getItem(WORKFLOW_MODE_STORAGE_KEY) !== "api"
+  ) {
+    return undefined;
+  }
+  const config = getStoredApiConfig();
+  return config.apiKey ? config : undefined;
+}
+
+function saveWorkflowMode(workflowMode: string): void {
+  if (typeof window === "undefined") {
+    return;
+  }
+  window.localStorage.setItem(WORKFLOW_MODE_STORAGE_KEY, workflowMode);
+}
 
 interface RangeValue {
   start?: number;
@@ -403,7 +490,10 @@ export async function api_nlpanel_handle(payload: {
   createRule?: any;
   previewOnly?: boolean;
 }): Promise<any> {
-  const response = await axios.post(`${API_BASE_URL}nlpanel`, payload);
+  const response = await axios.post(`${API_BASE_URL}nlpanel`, {
+    ...payload,
+    apiConfig: getEphemeralApiConfigPayload(),
+  });
   return response.data;
 }
 
@@ -643,6 +733,7 @@ export async function api_submit_text(
       columnNames: columnNames,
       ruleType: ruleType,
       ruleValue: ruleValue,
+      apiConfig: getEphemeralApiConfigPayload(),
     });
     return response.data.result;
   } catch (error) {
@@ -698,6 +789,7 @@ export async function api_refine_validation_rules(
       {
         validFlag,
         selectInfo,
+        apiConfig: getEphemeralApiConfigPayload(),
       },
       {
         headers: {
@@ -805,22 +897,12 @@ export interface UploadDatasetResponse {
   message: string;
 }
 
-export interface ApiProviderConfig {
-  apiKey: string;
-  baseUrl: string;
-  model: string;
-}
-
-export interface ApiConfigResponse {
-  apiProvider: string;
-  providers: Record<string, ApiProviderConfig>;
-}
-
 export async function api_change_dataset(
   dataset: string,
   workflowMode: string
 ): Promise<boolean> {
   try {
+    saveWorkflowMode(workflowMode);
     const response = await axios.post(`${API_BASE_URL}change-dataset`, {
       dataset: dataset,
       workflowMode: workflowMode,
@@ -836,6 +918,7 @@ export async function api_set_workflow_mode(
   workflowMode: string
 ): Promise<void> {
   try {
+    saveWorkflowMode(workflowMode);
     await axios.post(`${API_BASE_URL}workflow-mode`, {
       workflowMode,
     });
@@ -845,39 +928,19 @@ export async function api_set_workflow_mode(
   }
 }
 
-export async function api_get_api_config(): Promise<ApiConfigResponse> {
-  try {
-    const response = await axios.get(`${API_BASE_URL}api-config`);
-    return response.data;
-  } catch (error) {
-    console.error("Failed to fetch API config:", error);
-    throw error;
-  }
-}
-
-export async function api_save_api_config(payload: {
-  apiProvider: string;
-  apiKey: string;
-  baseUrl?: string;
-  model?: string;
-}): Promise<ApiConfigResponse> {
-  try {
-    const response = await axios.post(`${API_BASE_URL}api-config`, payload);
-    return response.data;
-  } catch (error) {
-    console.error("Failed to save API config:", error);
-    throw error;
-  }
-}
-
 export async function api_upload_dataset(
   file: File,
   workflowMode: string
 ): Promise<UploadDatasetResponse> {
   try {
+    saveWorkflowMode(workflowMode);
     const formData = new FormData();
     formData.append("file", file);
     formData.append("workflowMode", workflowMode);
+    const apiConfig = getEphemeralApiConfigPayload();
+    if (apiConfig) {
+      formData.append("apiConfig", JSON.stringify(apiConfig));
+    }
 
     const response = await axios.post(
       `${API_BASE_URL}upload-dataset`,

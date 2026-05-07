@@ -152,9 +152,10 @@ import { renderDateChart } from "@/render/date";
 import { discrete_continuous_matrix } from "@/render/discrete_continuous_matrix";
 import { continuous_matrix } from "@/render/continuous_matrix";
 import {
-  api_get_api_config,
-  api_save_api_config,
+  defaultApiProviderConfigMap,
+  getStoredApiConfig,
   api_upload_dataset,
+  saveStoredApiConfig,
 } from "@/utils/callapi";
 import { multiple_matrix } from "@/render/multiple_matrix";
 
@@ -320,32 +321,7 @@ export default defineComponent({
         { label: "DeepSeek", value: "deepseek" },
         { label: "Qwen", value: "qwen" },
       ],
-      apiProviderConfigMap: {
-        openai: {
-          apiProvider: "openai",
-          apiKey: "",
-          baseUrl: "https://api.openai.com/v1",
-          model: "gpt-3.5-turbo",
-        },
-        anthropic: {
-          apiProvider: "anthropic",
-          apiKey: "",
-          baseUrl: "",
-          model: "claude-3-sonnet-20240229",
-        },
-        deepseek: {
-          apiProvider: "deepseek",
-          apiKey: "",
-          baseUrl: "https://api.deepseek.com/v1",
-          model: "deepseek-chat",
-        },
-        qwen: {
-          apiProvider: "qwen",
-          apiKey: "",
-          baseUrl: "https://dashscope.aliyuncs.com/compatible-mode/v1",
-          model: "qwen3-max",
-        },
-      },
+      apiProviderConfigMap: { ...defaultApiProviderConfigMap },
     };
   },
   methods: {
@@ -716,20 +692,13 @@ export default defineComponent({
       this.apiConfigLoading = true;
       this.showApiConfigDialog = true;
       try {
-        const config = await api_get_api_config();
+        const config = getStoredApiConfig();
         const providerMap: Record<string, ApiConfigForm> = {
           ...this.apiProviderConfigMap,
         };
-        Object.entries(config.providers || {}).forEach(([provider, value]) => {
-          providerMap[provider] = {
-            apiProvider: provider,
-            apiKey: value.apiKey || "",
-            baseUrl: value.baseUrl || "",
-            model: value.model || "",
-          };
-        });
+        providerMap[config.apiProvider] = { ...config };
         this.apiProviderConfigMap = providerMap;
-        const provider = config.apiProvider || "openai";
+        const provider = config.apiProvider;
         this.apiConfigForm = { ...providerMap[provider] };
       } finally {
         this.apiConfigLoading = false;
@@ -779,17 +748,15 @@ export default defineComponent({
 
       try {
         this.apiConfigSaving = true;
-        await api_save_api_config({
+        const config = {
           apiProvider: provider,
           apiKey,
           baseUrl,
           model,
-        });
+        };
+        saveStoredApiConfig(config);
         this.apiProviderConfigMap[provider] = {
-          apiProvider: provider,
-          apiKey,
-          baseUrl,
-          model,
+          ...config,
         };
         this.showApiConfigDialog = false;
         this.previousWorkflowMode = "api";

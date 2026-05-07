@@ -48,7 +48,7 @@ from generate_card_example import *
 from constraintMapGenerator import generate_constraint_map
 from detection_script_builder import build_detection_script
 from main import generate_validation_rule
-from llms import get_api_config, save_api_config
+from llms import get_api_config, use_api_config
 import pandas as pd
 import json
 import time
@@ -167,6 +167,22 @@ def set_workflow_mode(mode: str):
 
 def get_model_from_workflow():
     return None if workflow_mode == "ollama" else "api"
+
+
+def get_request_api_config(data=None):
+    """Extract client-held API config from JSON or multipart requests."""
+    if data is None and request.is_json:
+        data = request.get_json(silent=True) or {}
+    if isinstance(data, dict) and isinstance(data.get("apiConfig"), dict):
+        return data.get("apiConfig")
+    raw_config = request.form.get("apiConfig") if request.form else None
+    if raw_config:
+        try:
+            parsed = json.loads(raw_config)
+            return parsed if isinstance(parsed, dict) else None
+        except json.JSONDecodeError:
+            return None
+    return None
 
 
 def sanitize_dataset_name(filename: str) -> str:
@@ -337,14 +353,9 @@ def api_get_api_config():
 
 @app.route('/api/api-config', methods=['POST'])
 def api_save_api_config():
-    try:
-        data = request.get_json() or {}
-        saved_config = save_api_config(data)
-        return jsonify(saved_config), 200
-    except ValueError as e:
-        return jsonify({'error': str(e)}), 400
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+    return jsonify({
+        'error': 'API configuration is stored in the browser and sent only with LLM requests.'
+    }), 410
 
 
 @app.route('/api/upload-dataset', methods=['POST'])
@@ -377,7 +388,8 @@ def api_upload_dataset():
 
         df = pd.read_csv(dataset_csv_path)
         model_param = get_model_from_workflow()
-        generate_validation_rule(df, dataset_name, model_param, dataset_dir, orderConditionDict={})
+        with use_api_config(get_request_api_config()):
+            generate_validation_rule(df, dataset_name, model_param, dataset_dir, orderConditionDict={})
 
         validation_rules_path = os.path.join(dataset_dir, 'validation_rules.json')
         final_validation_path = os.path.join(dataset_dir, 'finalValidation.json')
@@ -1850,6 +1862,7 @@ def api_refine_validation_rules():
     try:
         # Read request payload
         data = request.get_json()
+        api_config = get_request_api_config(data)
         
         # Extract required params
         valid_flag = data.get('validFlag', False)
@@ -1859,13 +1872,14 @@ def api_refine_validation_rules():
         data_path = csv_file_path
             
         # Run rule refinement
-        result = refine_validation_rules(
-            validation_dict_path,
-            valid_flag,
-            data_path,
-            select_info,
-            model=get_model_from_workflow()
-        )
+        with use_api_config(api_config):
+            result = refine_validation_rules(
+                validation_dict_path,
+                valid_flag,
+                data_path,
+                select_info,
+                model=get_model_from_workflow()
+            )
         def replace_non_serializable(data):
             if isinstance(data, dict):
                 return {key: replace_non_serializable(value) for key, value in data.items()}
@@ -1920,12 +1934,14 @@ def api_submit_text():
     try:
         # Read request payload
         data = request.get_json()
+        api_config = get_request_api_config(data)
         input_text = data.get('text', "")
         column_names = data.get('columnNames', [])
         rule_type = data.get('ruleType', "")
         rule_value = data.get('ruleValue', "")
         original_rule = generate_original_rule(new_json_file_path, column_names, rule_type, rule_value)
-        result = refine_NL(original_rule, input_text, get_model_from_workflow())
+        with use_api_config(api_config):
+            result = refine_NL(original_rule, input_text, get_model_from_workflow())
         
         # Normalize column field format in refine result
         if result.get('refineDict') and 'updateRules' in result['refineDict']:
@@ -2044,17 +2060,19 @@ def api_get_rule_creation_info():
 @app.route('/api/nlpanel', methods=['POST'])
 def api_nlpanel():
     data = request.json or {}
+    api_config = get_request_api_config(data)
     nl_text = data.get('naturalLanguage', '')
     rule_context = data.get('ruleContext')
     create_rule_payload = data.get('createRule')
     preview_only = bool(data.get('previewOnly'))
     apply_changes = not preview_only
 
-    intent_result = detect_nl_intent(
-        nl_text,
-        workflow_mode=workflow_mode,
-        model=get_model_from_workflow(),
-    )
+    with use_api_config(api_config):
+        intent_result = detect_nl_intent(
+            nl_text,
+            workflow_mode=workflow_mode,
+            model=get_model_from_workflow(),
+        )
 
     response_payload = {"intentResult": intent_result, "previewOnly": preview_only}
 
@@ -2072,12 +2090,13 @@ def api_nlpanel():
             with open(new_json_file_path, 'r', encoding='utf-8') as f:
                 validation_data = json.load(f)
             available_columns = [k for k in validation_data.keys() if isinstance(validation_data.get(k), dict) and validation_data.get(k).get('type')]
-            guess = locate_rule_type_and_columns(
-                nl_text,
-                available_columns,
-                model=get_model_from_workflow(),
-                workflow_mode=workflow_mode,
-            )
+            with use_api_config(api_config):
+                guess = locate_rule_type_and_columns(
+                    nl_text,
+                    available_columns,
+                    model=get_model_from_workflow(),
+                    workflow_mode=workflow_mode,
+                )
             rule_type = guess.get('ruleType') or guess.get('rule_type')
             columns_list = guess.get('columnsList') or guess.get('columns_list') or []
             validation_rule = None
@@ -2105,11 +2124,12 @@ def api_nlpanel():
             return jsonify(response_payload), 400
 
         try:
-            refine_result = refine_NL(
-                rule_context,
-                nl_text,
-                model=get_model_from_workflow(),
-            )
+            with use_api_config(api_config):
+                refine_result = refine_NL(
+                    rule_context,
+                    nl_text,
+                    model=get_model_from_workflow(),
+                )
             response_payload["refineResult"] = _normalize_refine_result_for_frontend(
                 refine_result
             )
@@ -2153,11 +2173,12 @@ def api_nlpanel():
     # Preview fallback: if previewOnly and we have a rule_context but no refineResult, still call refine_NL
     if preview_only and rule_context and not response_payload.get("refineResult"):
         try:
-            refine_result = refine_NL(
-                rule_context,
-                nl_text,
-                model=get_model_from_workflow(),
-            )
+            with use_api_config(api_config):
+                refine_result = refine_NL(
+                    rule_context,
+                    nl_text,
+                    model=get_model_from_workflow(),
+                )
             response_payload["refineResult"] = _normalize_refine_result_for_frontend(
                 refine_result
             )
